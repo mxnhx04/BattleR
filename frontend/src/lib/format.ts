@@ -1,5 +1,5 @@
-// Deterministic pseudo-address so the same mock player name always renders
-// the same fake "wallet". Only used by the old mock match engine.
+// Deterministic pseudo-address so the same seed always renders the same
+// fake "wallet" — used by the no-backend /simulate demo.
 export function shortAddress(seed: string): string {
   let hash = 0;
   for (let i = 0; i < seed.length; i++) {

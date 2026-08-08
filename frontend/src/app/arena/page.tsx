@@ -14,7 +14,6 @@ import { ActivityFeed } from "@/components/ActivityFeed";
 import { TxCounter } from "@/components/TxCounter";
 import { GlowButton } from "@/components/GlowButton";
 import { WalletBadge } from "@/components/WalletBadge";
-import { QrJoinCode } from "@/components/QrJoinCode";
 import { IconPhone, IconSpeaker, IconTrophy } from "@/components/icons";
 
 const ACTIVITY_SFX: Partial<Record<string, SfxKind>> = {
@@ -153,12 +152,14 @@ export default function ArenaPage() {
       </div>
 
       {match.status === "waiting" && (
-        <div className="flex flex-col items-center gap-4 mb-10 bg-white/[0.03] border border-white/10 rounded-xl p-8">
+        <div className="flex flex-col items-center gap-2 mb-10 bg-white/[0.03] border border-white/10 rounded-xl p-8">
           <div className="flex items-center gap-2 font-heading font-bold text-2xl tracking-wide text-center">
             <IconPhone className="w-5 h-5" />
-            Scan the code below to join on your phone
+            Join on your phone at /game
           </div>
-          <QrJoinCode size={220} />
+          <p className="text-sm text-brand-gray">
+            Pay the entry fee to join — every action after that is a real Monad transaction.
+          </p>
         </div>
       )}
 
@@ -216,7 +217,7 @@ export default function ArenaPage() {
           ))}
           {match.players.length === 0 && (
             <div className="col-span-full text-brand-gray text-sm py-12 text-center">
-              Waiting for players to scan in and join…
+              Waiting for players to join…
             </div>
           )}
         </div>

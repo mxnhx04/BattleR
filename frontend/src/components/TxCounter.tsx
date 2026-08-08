@@ -4,7 +4,13 @@ import { useEffect, useState } from "react";
 import { IconBolt, IconCrosshair, IconHeart, IconPlus, IconShield } from "./icons";
 import type { TxCounts } from "@/lib/types";
 
-export function TxCounter({ counts }: { counts: TxCounts }) {
+export function TxCounter({
+  counts,
+  label = "Onchain Actions This Match",
+}: {
+  counts: TxCounts;
+  label?: string;
+}) {
   const total =
     counts.attack + counts.shield + counts.heal + counts.power + counts.join;
 
@@ -28,7 +34,7 @@ export function TxCounter({ counts }: { counts: TxCounts }) {
         {total}
       </div>
       <div className="text-xs md:text-sm tracking-[0.3em] text-brand-gray uppercase mt-1">
-        Onchain Actions This Match
+        {label}
       </div>
       <div className="flex flex-wrap justify-center gap-x-5 gap-y-1 mt-3 text-xs text-brand-gray font-mono">
         <span className="inline-flex items-center gap-1">

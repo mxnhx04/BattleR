@@ -46,6 +46,13 @@ export default function LandingPage() {
       </div>
 
       <Link
+        href="/simulate"
+        className="relative z-10 mt-6 text-xs tracking-[0.2em] uppercase text-brand-gray/70 hover:text-brand-gray"
+      >
+        Simulate Demo (no wallet needed)
+      </Link>
+
+      <Link
         href="/admin"
         className="relative z-10 mt-14 text-[0.65rem] tracking-[0.2em] uppercase text-brand-gray/60 hover:text-brand-gray"
       >
