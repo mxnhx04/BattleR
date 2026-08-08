@@ -15,6 +15,12 @@
 
   --animate-pulse-glow: pulseGlow 5s ease-in-out infinite;
   --animate-storm-pulse: stormPulse 3s ease-out infinite;
+  --animate-shake: shake 0.4s ease-in-out;
+  --animate-flash-damage: flashDamage 0.5s ease-out;
+  --animate-flash-heal: flashHeal 0.6s ease-out;
+  --animate-flash-shield: flashShield 0.6s ease-out;
+  --animate-eliminate: eliminateCard 0.6s ease-out forwards;
+  --animate-pop: pop 0.35s ease-out;
 }
 
 @keyframes pulseGlow {
@@ -37,6 +43,80 @@
   100% {
     transform: scale(1);
     opacity: 0;
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-6px);
+  }
+  40%,
+  80% {
+    transform: translateX(6px);
+  }
+}
+
+@keyframes flashDamage {
+  0% {
+    background-color: rgba(255, 60, 60, 0.35);
+    box-shadow: 0 0 0 2px rgba(255, 60, 60, 0.6);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: 0 0 0 2px transparent;
+  }
+}
+
+@keyframes flashHeal {
+  0% {
+    background-color: rgba(52, 211, 153, 0.3);
+    box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.6);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: 0 0 0 2px transparent;
+  }
+}
+
+@keyframes flashShield {
+  0% {
+    background-color: rgba(0, 229, 255, 0.3);
+    box-shadow: 0 0 0 2px rgba(0, 229, 255, 0.6);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: 0 0 0 2px transparent;
+  }
+}
+
+@keyframes eliminateCard {
+  0% {
+    transform: scale(1) rotate(0deg);
+    filter: grayscale(0);
+  }
+  40% {
+    transform: scale(1.05) rotate(-2deg);
+  }
+  100% {
+    transform: scale(0.97) rotate(0deg);
+    filter: grayscale(1);
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.18);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 

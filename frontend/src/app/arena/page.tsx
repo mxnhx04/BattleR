@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useOnChainMatch } from "@/hooks/useOnChainMatch";
 import { useGameWallet } from "@/hooks/useGameWallet";
 import { useIsOwner } from "@/hooks/useIsOwner";
+import { useSfx } from "@/hooks/useSfx";
+import type { SfxKind } from "@/lib/sfx";
 import { resetMatch, startGame } from "@/lib/contract/actions";
 import { formatMon } from "@/lib/format";
 import { PlayerCard } from "@/components/PlayerCard";
@@ -12,13 +14,40 @@ import { ActivityFeed } from "@/components/ActivityFeed";
 import { TxCounter } from "@/components/TxCounter";
 import { GlowButton } from "@/components/GlowButton";
 import { WalletBadge } from "@/components/WalletBadge";
+import { QrJoinCode } from "@/components/QrJoinCode";
+
+const ACTIVITY_SFX: Partial<Record<string, SfxKind>> = {
+  join: "join",
+  attack: "attack",
+  power: "power",
+  shield: "shield",
+  heal: "heal",
+  eliminate: "eliminate",
+  win: "win",
+};
 
 export default function ArenaPage() {
   const { address, walletClient } = useGameWallet();
   const isOwner = useIsOwner(address);
   const match = useOnChainMatch(address);
+  const { play } = useSfx();
   const [pending, setPending] = useState<"start" | "reset" | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [soundEnabled, setSoundEnabled] = useState(false);
+  const lastSeenEventId = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!soundEnabled) return;
+    const latest = match.activity[0];
+    if (!latest || latest.id === lastSeenEventId.current) return;
+    const isFirstObservation = lastSeenEventId.current === null;
+    lastSeenEventId.current = latest.id;
+    // Don't fire a sound for the whole backlog the first time we see it —
+    // only for events that arrive after sound was turned on.
+    if (isFirstObservation) return;
+    const sfx = ACTIVITY_SFX[latest.kind];
+    if (sfx) play(sfx);
+  }, [match.activity, soundEnabled, play]);
 
   const alive = match.players.filter((p) => p.alive).length;
   const total = match.players.length;
@@ -98,11 +127,17 @@ export default function ArenaPage() {
 
   return (
     <main className="flex-1 px-4 sm:px-8 py-8 max-w-[1400px] mx-auto w-full">
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-wrap items-center justify-between gap-y-3 mb-8">
         <h1 className="font-display text-3xl sm:text-4xl tracking-wide">
           🔥 <span className="text-brand-orange">MONAD</span> BATTLE ROYALE
         </h1>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <button
+            onClick={() => setSoundEnabled((v) => !v)}
+            className="text-xs tracking-[0.2em] uppercase text-brand-gray hover:text-white flex items-center gap-1"
+          >
+            {soundEnabled ? "🔊 Sound On" : "🔇 Enable Sound"}
+          </button>
           <WalletBadge />
           <Link
             href="/"
@@ -112,6 +147,15 @@ export default function ArenaPage() {
           </Link>
         </div>
       </div>
+
+      {match.status === "waiting" && (
+        <div className="flex flex-col items-center gap-4 mb-10 bg-white/[0.03] border border-white/10 rounded-xl p-8">
+          <div className="font-display text-2xl tracking-wide text-center">
+            📱 Scan the code below to join on your phone
+          </div>
+          <QrJoinCode size={220} />
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] items-center gap-6 mb-10 bg-white/[0.03] border border-white/10 rounded-xl p-6">
         <div className="text-center lg:text-left">

@@ -6,15 +6,17 @@ import { useOnChainMatch } from "@/hooks/useOnChainMatch";
 import { useGameWallet } from "@/hooks/useGameWallet";
 import { useMonBalance } from "@/hooks/useMonBalance";
 import { useNow } from "@/hooks/useNow";
-import { attack, heal, joinGame, powerAttack, shield } from "@/lib/contract/actions";
+import { attack, claimPrize, heal, joinGame, powerAttack, shield } from "@/lib/contract/actions";
 import { ATTACK_FEE_MON, ENTRY_FEE_MON, HEAL_FEE_MON, MAX_HEALS_PER_MATCH, POWER_ATTACK_FEE_MON, SHIELD_FEE_MON } from "@/lib/economy";
 import { formatMon, shortTxHash, truncateAddress } from "@/lib/format";
+import { useSfx } from "@/hooks/useSfx";
+import type { SfxKind } from "@/lib/sfx";
 import { HpHearts } from "@/components/HpHearts";
 import { GlowButton } from "@/components/GlowButton";
 import { TargetSheet } from "@/components/TargetSheet";
 import { ActivityFeed } from "@/components/ActivityFeed";
 
-type PendingAction = "attack" | "shield" | "heal" | "power" | "join" | null;
+type PendingAction = "attack" | "shield" | "heal" | "power" | "join" | "claim" | null;
 
 const FEES = {
   join: ENTRY_FEE_MON,
@@ -30,6 +32,16 @@ const ACTION_LABEL: Record<Exclude<PendingAction, null>, string> = {
   shield: "🛡️ Shield confirmed",
   heal: "❤️ Heal confirmed",
   power: "💥 Power attack confirmed",
+  claim: "🏆 Prize claimed",
+};
+
+const ACTION_SFX: Record<Exclude<PendingAction, null>, SfxKind> = {
+  join: "join",
+  attack: "attack",
+  shield: "shield",
+  heal: "heal",
+  power: "power",
+  claim: "win",
 };
 
 export default function GamePage() {
@@ -37,6 +49,7 @@ export default function GamePage() {
   const balance = useMonBalance(address);
   const match = useOnChainMatch(address);
   const now = useNow();
+  const { play, muted, toggleMuted } = useSfx();
   const [pending, setPending] = useState<PendingAction>(null);
   const [pickingTarget, setPickingTarget] = useState<"attack" | "power" | null>(null);
   const [confirmToast, setConfirmToast] = useState<{ message: string; tx: string } | null>(null);
@@ -48,6 +61,7 @@ export default function GamePage() {
     setPending(label);
     try {
       const hash = await fn();
+      play(ACTION_SFX[label]);
       setConfirmToast({ message: ACTION_LABEL[label], tx: hash });
       setTimeout(() => setConfirmToast(null), 3200);
     } catch (e) {
@@ -165,7 +179,16 @@ export default function GamePage() {
             {balance !== undefined ? formatMon(balance) : "…"}
           </div>
         </div>
-        <HpHearts hp={you.hp} maxHp={you.maxHp} size="lg" />
+        <div className="flex flex-col items-end gap-2">
+          <HpHearts hp={you.hp} maxHp={you.maxHp} size="lg" />
+          <button
+            onClick={toggleMuted}
+            className="text-brand-gray hover:text-white text-lg leading-none"
+            aria-label={muted ? "Unmute sound" : "Mute sound"}
+          >
+            {muted ? "🔇" : "🔊"}
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-3 gap-2 text-center mb-6 text-xs">
@@ -207,9 +230,26 @@ export default function GamePage() {
       {match.status === "finished" && (
         <div className="mb-6 text-center text-sm border border-brand-orange/40 rounded-lg py-4 px-4 bg-brand-orange/10">
           {match.winnerId === you.id ? (
-            <span className="font-display text-2xl text-brand-orange text-glow-orange">
-              🏆 YOU WIN {formatMon(match.prizePoolMon)}!
-            </span>
+            <>
+              <span className="font-display text-2xl text-brand-orange text-glow-orange block mb-3">
+                🏆 YOU WIN!
+              </span>
+              {match.prizePoolMon > 0 ? (
+                <GlowButton
+                  color="orange"
+                  disabled={pending === "claim" || !walletClient}
+                  onClick={() =>
+                    runAction("claim", () => claimPrize(walletClient!, address))
+                  }
+                >
+                  {pending === "claim"
+                    ? "Claiming…"
+                    : `Claim Prize (${formatMon(match.prizePoolMon)})`}
+                </GlowButton>
+              ) : (
+                <span className="text-brand-cyan">🎉 Prize claimed!</span>
+              )}
+            </>
           ) : (
             <span>
               Match over —{" "}
