@@ -4,6 +4,11 @@ import * as path from "path";
 
 async function main() {
   const [deployer] = await ethers.getSigners();
+  if (!deployer) {
+    throw new Error(
+      "No deployer signer loaded. Set DEPLOYER_PRIVATE_KEY in .env and rerun the deploy command.",
+    );
+  }
   const balance = await ethers.provider.getBalance(deployer.address);
 
   console.log(`Network:  ${network.name}`);
