@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-black: #0d0d0d;
+  --color-brand-charcoal: #1a1a1a;
+  --color-brand-navy: #16213e;
+  --color-brand-orange: #ff6b00;
+  --color-brand-cyan: #00e5ff;
+  --color-brand-purple: #b026ff;
+  --color-brand-white: #f5f6f8;
+  --color-brand-gray: #9aa0ac;
+
+  --font-display: var(--font-bebas), sans-serif;
+  --font-body: var(--font-inter), sans-serif;
+
+  --animate-pulse-glow: pulseGlow 5s ease-in-out infinite;
+  --animate-storm-pulse: stormPulse 3s ease-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.12);
+  }
+}
+
+@keyframes stormPulse {
+  0% {
+    transform: scale(0.25);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+html,
+body {
+  background: var(--color-brand-black);
+}
+
+::selection {
+  background: var(--color-brand-orange);
+  color: var(--color-brand-black);
+}
+
+.text-glow-orange {
+  filter: drop-shadow(0 0 8px rgba(255, 107, 0, 0.65));
+}
+.text-glow-cyan {
+  filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.65));
+}
+.text-glow-purple {
+  filter: drop-shadow(0 0 8px rgba(176, 38, 255, 0.65));
+}
