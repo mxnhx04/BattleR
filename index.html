@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BATTLE ROYALE — Brand Style Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@500;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --black:#0D0D0D;
+    --charcoal:#1A1A1A;
+    --navy:#16213E;
+    --gold:#F1D32B;
+    --blue:#1EBDDB;
+    --white:#F5F6F8;
+    --gray:#9AA0AC;
+    --line:rgba(245,246,248,0.08);
+    /* Burbank Big Condensed Black and Heading Now are commercial fonts
+       (not on Google Fonts) — Anton and Space Grotesk stand in until
+       licensed font files are available. */
+    --font-logo:'Anton', sans-serif;
+    --font-heading:'Space Grotesk', sans-serif;
+    --font-body:'Noto Sans', sans-serif;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--black);
+    color:var(--white);
+    font-family:var(--font-body);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+
+  ::selection{ background:var(--gold); color:var(--black); }
+
+  h1,h2,h3,h4{
+    font-family:var(--font-heading);
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.02em;
+    line-height:1;
+  }
+
+  a{ color:inherit; }
+
+  img,svg{ display:block; }
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 2rem;
+  }
+
+  /* ---------- STICKY NAV ---------- */
+  .nav{
+    position:sticky;
+    top:0;
+    z-index:100;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:1rem 2rem;
+    background:rgba(13,13,13,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-brand{
+    display:flex;
+    align-items:center;
+    gap:0.6rem;
+    font-family:var(--font-logo);
+    letter-spacing:0.04em;
+    font-size:1.1rem;
+  }
+  .nav-brand .dot{
+    width:10px;height:10px;border-radius:50%;
+    background:var(--gold);
+  }
+  .nav-links{
+    display:flex;
+    gap:1.6rem;
+    list-style:none;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--gray);
+  }
+  .nav-links a{ text-decoration:none; transition:color .2s; }
+  .nav-links a:hover{ color:var(--blue); }
+  @media (max-width:700px){ .nav-links{ display:none; } }
+
+  /* ---------- SECTION SCAFFOLD (diagonal dividers) ---------- */
+  .section{
+    position:relative;
+    overflow:hidden;
+    padding:7rem 0 8rem;
+  }
+  .section .bg{
+    position:absolute;
+    inset:-8% -8%;
+    transform:skewY(-3.5deg);
+    z-index:0;
+  }
+  .section .content{ position:relative; z-index:2; }
+  .bg-charcoal{ background:var(--charcoal); }
+  .bg-navy{ background:linear-gradient(160deg, var(--navy), var(--black) 75%); }
+  .bg-black{ background:var(--black); }
+
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:0.5rem;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.28em;
+    text-transform:uppercase;
+    color:var(--blue);
+    margin-bottom:1rem;
+  }
+  .eyebrow::before{
+    content:'';
+    width:22px;height:2px;
+    background:var(--blue);
+  }
+
+  .section-title{
+    font-size:clamp(2.2rem, 5vw, 3.4rem);
+    margin-bottom:0.6rem;
+  }
+  .section-sub{
+    color:var(--gray);
+    max-width:640px;
+    font-size:1rem;
+    margin-bottom:3rem;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height:92vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    background:
+      radial-gradient(circle at 50% 30%, rgba(241,211,43,0.12), transparent 55%),
+      radial-gradient(circle at 20% 80%, rgba(30,189,219,0.10), transparent 50%),
+      var(--black);
+    padding:6rem 2rem 4rem;
+    overflow:hidden;
+  }
+  .hero-glow{
+    position:absolute;
+    top:50%; left:50%;
+    width:640px; height:640px;
+    transform:translate(-50%,-50%);
+    background:radial-gradient(circle, rgba(241,211,43,0.30), rgba(30,189,219,0.08) 45%, transparent 70%);
+    filter:blur(40px);
+    animation:pulseGlow 5s ease-in-out infinite;
+    z-index:0;
+  }
+  @keyframes pulseGlow{
+    0%,100%{ opacity:0.6; transform:translate(-50%,-50%) scale(1); }
+    50%{ opacity:1; transform:translate(-50%,-50%) scale(1.12); }
+  }
+
+  .badge{
+    position:relative;
+    z-index:1;
+    width:180px; height:180px;
+    margin:0 auto 2rem;
+  }
+  .badge svg{ width:100%; height:100%; overflow:visible; }
+  .badge .hex-outer{
+    fill:rgba(241,211,43,0.06);
+    stroke:var(--gold);
+    stroke-width:2;
+  }
+  .badge .hex-inner{
+    fill:none;
+    stroke:var(--blue);
+    stroke-width:1;
+    opacity:0.6;
+  }
+  .badge .crosshair{
+    stroke:var(--white);
+    stroke-width:1.6;
+    fill:none;
+  }
+  .badge .crosshair-dot{ fill:var(--gold); }
+
+  .hero-word{
+    position:relative;
+    z-index:1;
+    font-family:var(--font-logo);
+    font-size:clamp(3rem, 11vw, 7.2rem);
+    letter-spacing:0.02em;
+    color:var(--white);
+  }
+  .hero-word span{ color:var(--gold); }
+
+  .hero-tag{
+    position:relative;
+    z-index:1;
+    margin-top:1rem;
+    font-size:clamp(0.9rem, 2vw, 1.15rem);
+    color:var(--gray);
+    letter-spacing:0.04em;
+    max-width:520px;
+    margin-left:auto; margin-right:auto;
+  }
+  .hero-meta{
+    position:relative;
+    z-index:1;
+    margin-top:2.4rem;
+    display:flex;
+    gap:0.8rem;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+  .pill{
+    font-size:0.68rem;
+    font-weight:700;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    padding:0.5rem 1rem;
+    border:1px solid var(--line);
+    border-radius:999px;
+    color:var(--gray);
+    background:rgba(255,255,255,0.02);
+  }
+  .pill b{ color:var(--blue); font-weight:800; }
+
+  /* ---------- COLOR PALETTE ---------- */
+  .swatch-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+    gap:1.4rem;
+  }
+  .swatch{
+    border:1px solid var(--line);
+    border-radius:10px;
+    overflow:hidden;
+    background:rgba(255,255,255,0.02);
+    transition:transform .2s ease, border-color .2s ease;
+  }
+  .swatch:hover{ transform:translateY(-4px); border-color:rgba(255,255,255,0.2); }
+  .swatch-color{ height:110px; position:relative; }
+  .swatch-body{ padding:1rem 1.1rem 1.2rem; }
+  .swatch-hex{
+    font-family:var(--font-heading);
+    font-weight:700;
+    font-size:1.15rem;
+    letter-spacing:0.03em;
+  }
+  .swatch-name{
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--gray);
+    margin:0.35rem 0 0.5rem;
+  }
+  .swatch-note{ font-size:0.85rem; color:#c3c7ce; }
+
+  /* ---------- TYPOGRAPHY ---------- */
+  .type-row{
+    display:flex;
+    align-items:baseline;
+    gap:1.2rem;
+    padding:1.4rem 0;
+    border-bottom:1px solid var(--line);
+    flex-wrap:wrap;
+  }
+  .type-row:last-of-type{ border-bottom:none; }
+  .type-tag{
+    font-family:var(--font-body);
+    font-size:0.68rem;
+    font-weight:800;
+    letter-spacing:0.14em;
+    color:var(--gold);
+    width:64px;
+    flex-shrink:0;
+  }
+  .type-sample h1,.type-sample h2,.type-sample h3,.type-sample h4{
+    letter-spacing:0.01em;
+  }
+  .h1-sample{ font-size:clamp(2.4rem,6vw,4rem); }
+  .h2-sample{ font-size:clamp(2rem,5vw,3rem); color:var(--blue); }
+  .h3-sample{ font-size:clamp(1.5rem,4vw,2.1rem); }
+  .h4-sample{ font-size:1.3rem; color:var(--gray); letter-spacing:0.14em; }
+
+  .body-sample{
+    margin-top:2.4rem;
+    padding:2rem;
+    background:rgba(255,255,255,0.02);
+    border:1px solid var(--line);
+    border-radius:10px;
+    max-width:640px;
+    color:#c3c7ce;
+    font-size:1rem;
+  }
+  .body-sample strong{ color:var(--white); }
+
+  .font-specimen{
+    display:flex;
+    gap:1rem;
+    margin-top:2.4rem;
+    flex-wrap:wrap;
+  }
+  .font-card{
+    flex:1 1 240px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:1.4rem;
+    background:linear-gradient(160deg, rgba(255,255,255,0.03), transparent);
+  }
+  .font-card .fname{ font-size:0.7rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gray); margin-bottom:0.6rem; }
+  .font-card .fdemo{ font-family:var(--font-logo); font-size:2.6rem; letter-spacing:0.02em; }
+  .font-card .fdemo.heading{ font-family:var(--font-heading); font-weight:700; font-size:2rem; letter-spacing:0.01em; text-transform:uppercase; }
+  .font-card .fdemo.body{ font-family:var(--font-body); font-size:1.4rem; font-weight:600; letter-spacing:0; }
+  .font-card .fuse{ margin-top:0.6rem; font-size:0.8rem; color:#c3c7ce; }
+
+  /* ---------- ICONOGRAPHY ---------- */
+  .icon-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(140px,1fr));
+    gap:1.2rem;
+  }
+  .icon-card{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:0.9rem;
+    padding:2rem 1rem;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:rgba(255,255,255,0.02);
+    transition:transform .2s ease, background .2s ease;
+  }
+  .icon-card:hover{ transform:translateY(-4px); background:rgba(255,255,255,0.04); }
+  .icon-card svg{ width:52px; height:52px; }
+  .icon-card span{
+    font-size:0.68rem;
+    font-weight:700;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--gray);
+  }
+  .ic-gold{ stroke:var(--gold); }
+  .ic-blue{ stroke:var(--blue); }
+  .ic-fill-gold{ fill:var(--gold); }
+
+  /* ---------- TEXTURE & EFFECTS ---------- */
+  .fx-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(280px,1fr));
+    gap:1.6rem;
+  }
+  .fx-card{
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:2.2rem;
+    min-height:260px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    position:relative;
+    overflow:hidden;
+  }
+  .fx-label{
+    font-size:0.68rem;
+    font-weight:800;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--gray);
+    position:relative;
+    z-index:2;
+  }
+
+  /* grunge texture panel */
+  .fx-grunge{
+    background:
+      repeating-linear-gradient(115deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 26px),
+      repeating-linear-gradient(25deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 2px, transparent 2px, transparent 18px),
+      radial-gradient(circle at 20% 30%, rgba(255,255,255,0.06), transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(255,255,255,0.05), transparent 45%),
+      linear-gradient(160deg, #1c1c1c, #0d0d0d);
+  }
+  .fx-grunge .fx-title{
+    position:relative; z-index:2;
+    font-family:var(--font-heading);
+    font-weight:700;
+    font-size:2.2rem;
+    letter-spacing:0.02em;
+    color:var(--white);
+  }
+
+  /* neon glow button */
+  .fx-button{
+    background:linear-gradient(160deg, var(--navy), var(--black));
+    align-items:center;
+  }
+  .btn-glow{
+    align-self:flex-start;
+    font-family:var(--font-heading);
+    font-weight:700;
+    font-size:1.05rem;
+    letter-spacing:0.05em;
+    background:transparent;
+    color:var(--gold);
+    border:2px solid var(--gold);
+    padding:0.85rem 1.8rem;
+    border-radius:6px;
+    cursor:pointer;
+    transition:all .25s ease;
+    text-transform:uppercase;
+  }
+  .btn-glow:hover{
+    background:var(--gold);
+    color:var(--black);
+    box-shadow:0 0 12px var(--gold), 0 0 36px rgba(241,211,43,0.6), 0 0 60px rgba(241,211,43,0.35);
+    transform:translateY(-2px);
+  }
+  .btn-glow.blue{ border-color:var(--blue); color:var(--blue); margin-top:1rem;}
+  .btn-glow.blue:hover{ background:var(--blue); color:var(--black); box-shadow:0 0 12px var(--blue), 0 0 36px rgba(30,189,219,0.6), 0 0 60px rgba(30,189,219,0.35); }
+
+  /* storm circle */
+  .fx-storm{
+    background:radial-gradient(circle at 50% 50%, rgba(241,211,43,0.08), var(--black) 70%);
+    align-items:center;
+    justify-content:center;
+  }
+  .storm-wrap{
+    position:relative;
+    width:150px; height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .storm-ring{
+    position:absolute;
+    border-radius:50%;
+    border:2px solid var(--gold);
+    box-shadow:0 0 14px rgba(241,211,43,0.6);
+  }
+  .storm-ring.r1{ width:150px; height:150px; animation:stormPulse 3s ease-out infinite; }
+  .storm-ring.r2{ width:150px; height:150px; animation:stormPulse 3s ease-out infinite 1s; }
+  .storm-ring.r3{ width:150px; height:150px; animation:stormPulse 3s ease-out infinite 2s; }
+  .storm-core{
+    width:44px; height:44px;
+    border-radius:50%;
+    background:radial-gradient(circle, var(--gold), transparent 70%);
+    box-shadow:0 0 20px var(--gold);
+  }
+  @keyframes stormPulse{
+    0%{ transform:scale(0.25); opacity:1; }
+    100%{ transform:scale(1); opacity:0; }
+  }
+
+  /* ---------- VOICE & TONE ---------- */
+  .voice-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(280px,1fr));
+    gap:1.6rem;
+  }
+  .voice-card{
+    border:1px solid var(--line);
+    border-left:3px solid var(--gold);
+    padding:2rem;
+    background:rgba(255,255,255,0.02);
+    border-radius:0 10px 10px 0;
+  }
+  .voice-card:nth-child(2){ border-left-color:var(--blue); }
+  .voice-card:nth-child(3){ border-left-color:var(--gold); }
+  .voice-line{
+    font-family:var(--font-heading);
+    font-weight:700;
+    font-size:clamp(1.6rem,4vw,2.2rem);
+    letter-spacing:0.01em;
+    margin-bottom:0.8rem;
+    text-transform:uppercase;
+  }
+  .voice-desc{ font-size:0.85rem; color:var(--gray); }
+
+  footer{
+    padding:3rem 2rem;
+    text-align:center;
+    color:var(--gray);
+    font-size:0.75rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    border-top:1px solid var(--line);
+    background:var(--black);
+  }
+  footer b{ color:var(--gold); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand"><span class="dot"></span>BATTLE ROYALE / BRAND KIT</div>
+  <ul class="nav-links">
+    <li><a href="#palette">Palette</a></li>
+    <li><a href="#type">Type</a></li>
+    <li><a href="#icons">Icons</a></li>
+    <li><a href="#fx">Effects</a></li>
+    <li><a href="#voice">Voice</a></li>
+  </ul>
+</nav>
+
+<!-- ================= HERO ================= -->
+<header class="hero" id="hero">
+  <div class="hero-glow"></div>
+  <div>
+    <div class="badge">
+      <svg viewBox="0 0 200 200">
+        <polygon class="hex-outer" points="100,6 182,52 182,148 100,194 18,148 18,52" />
+        <polygon class="hex-inner" points="100,26 164,62 164,138 100,174 36,138 36,62" />
+        <g class="crosshair">
+          <circle cx="100" cy="100" r="34" />
+          <line x1="100" y1="46" x2="100" y2="70" />
+          <line x1="100" y1="130" x2="100" y2="154" />
+          <line x1="46" y1="100" x2="70" y2="100" />
+          <line x1="130" y1="100" x2="154" y2="100" />
+        </g>
+        <circle class="crosshair-dot" cx="100" cy="100" r="4" />
+      </svg>
+    </div>
+    <h1 class="hero-word">BATTLE<span> ROYALE</span></h1>
+    <p class="hero-tag">Every move is a transaction. Attack. Defend. Survive. Last wallet standing wins.</p>
+    <div class="hero-meta">
+      <span class="pill">Base <b>#0D0D0D</b></span>
+      <span class="pill">Gold <b>#F1D32B</b></span>
+      <span class="pill">Blue <b>#1EBDDB</b></span>
+    </div>
+  </div>
+</header>
+
+<!-- ================= COLOR PALETTE ================= -->
+<section class="section bg-charcoal" id="palette">
+  <div class="bg bg-charcoal"></div>
+  <div class="content wrap">
+    <span class="eyebrow">02 — Foundation</span>
+    <h2 class="section-title">Color Palette</h2>
+    <p class="section-sub">A dark, high-contrast base built for a projector and a phone screen at the same time. Gold and blue mark action and state — never decoration for its own sake, and never used as a glow behind numbers.</p>
+
+    <div class="swatch-grid">
+      <div class="swatch">
+        <div class="swatch-color" style="background:#0D0D0D;"></div>
+        <div class="swatch-body">
+          <div class="swatch-hex">#0D0D0D</div>
+          <div class="swatch-name">Black — Base</div>
+          <div class="swatch-note">Primary background. The arena floor everything else sits on.</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#1A1A1A;"></div>
+        <div class="swatch-body">
+          <div class="swatch-hex">#1A1A1A</div>
+          <div class="swatch-name">Charcoal — Surface</div>
+          <div class="swatch-note">Cards, panels and section backgrounds layered above black.</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#16213E;"></div>
+        <div class="swatch-body">
+          <div class="swatch-hex">#16213E</div>
+          <div class="swatch-name">Navy — Depth</div>
+          <div class="swatch-note">Gradient anchor for cinematic, moody section transitions.</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#F1D32B;"></div>
+        <div class="swatch-body">
+          <div class="swatch-hex">#F1D32B</div>
+          <div class="swatch-name">Gold — Primary</div>
+          <div class="swatch-note">Attack, prizes, wins, primary CTAs.</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#1EBDDB;"></div>
+        <div class="swatch-body">
+          <div class="swatch-hex">#1EBDDB</div>
+          <div class="swatch-name">Light Blue — Secondary</div>
+          <div class="swatch-note">Shields, live state, onchain confirmations, links.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TYPOGRAPHY ================= -->
+<section class="section bg-navy" id="type">
+  <div class="bg bg-navy"></div>
+  <div class="content wrap">
+    <span class="eyebrow">03 — Voice on the page</span>
+    <h2 class="section-title">Typography</h2>
+    <p class="section-sub">A heavy condensed logo mark, a bold grotesk for headings, and a clean humanist sans for in-game and body text keep the hierarchy readable across a projector and a five-inch phone.</p>
+
+    <div class="font-specimen">
+      <div class="font-card">
+        <div class="fname">Logo — Anton</div>
+        <div class="fdemo">DROP IN</div>
+        <div class="fuse">Wordmark only. Stands in for Burbank Big Condensed Black (commercial, not on Google Fonts).</div>
+      </div>
+      <div class="font-card">
+        <div class="fname">Heading — Space Grotesk</div>
+        <div class="fdemo heading">Match Briefing</div>
+        <div class="fuse">Section headings, buttons, sheet titles. Stands in for Heading Now (commercial).</div>
+      </div>
+      <div class="font-card">
+        <div class="fname">Body / In-game — Noto Sans</div>
+        <div class="fdemo body">Player names, stats, HUD text</div>
+        <div class="fuse">Descriptions, rules, timestamps, transaction details, in-game feature copy.</div>
+      </div>
+    </div>
+
+    <div style="margin-top:3rem;">
+      <div class="type-row type-sample">
+        <span class="type-tag">H1</span>
+        <h1 class="h1-sample">LAST ONE STANDING</h1>
+      </div>
+      <div class="type-row type-sample">
+        <span class="type-tag">H2</span>
+        <h2 class="h2-sample">12 / 20 PLAYERS ALIVE</h2>
+      </div>
+      <div class="type-row type-sample">
+        <span class="type-tag">H3</span>
+        <h3 class="h3-sample">Prize Pool — 0.24 MON</h3>
+      </div>
+      <div class="type-row type-sample">
+        <span class="type-tag">H4</span>
+        <h4 class="h4-sample">Onchain Actions This Match</h4>
+      </div>
+    </div>
+
+    <div class="body-sample">
+      Every attack, shield and heal is a real transaction settled on Monad. <strong>Body copy stays quiet and functional</strong> so headings can do the shouting — use it for rules, confirmations and anything a player needs to actually read under pressure.
+    </div>
+  </div>
+</section>
+
+<!-- ================= ICONOGRAPHY ================= -->
+<section class="section bg-black" id="icons">
+  <div class="bg bg-black"></div>
+  <div class="content wrap">
+    <span class="eyebrow">04 — Iconography</span>
+    <h2 class="section-title">Icon Set</h2>
+    <p class="section-sub">Thin-stroke line icons — no emoji anywhere in the product. Color signals meaning: gold for offense and prizes, blue for defense and state.</p>
+
+    <div class="icon-grid">
+      <div class="icon-card">
+        <svg class="ic-gold" viewBox="0 0 64 64" fill="none" stroke-width="2.4" stroke-linecap="round">
+          <circle cx="32" cy="32" r="20"/>
+          <line x1="32" y1="2" x2="32" y2="14"/>
+          <line x1="32" y1="50" x2="32" y2="62"/>
+          <line x1="2" y1="32" x2="14" y2="32"/>
+          <line x1="50" y1="32" x2="62" y2="32"/>
+          <circle cx="32" cy="32" r="3" fill="currentColor" stroke="none"/>
+        </svg>
+        <span>Crosshair</span>
+      </div>
+
+      <div class="icon-card">
+        <svg class="ic-blue" viewBox="0 0 64 64" fill="none" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">
+          <path d="M32 4 L54 13 V29 C54 45 45 55 32 60 C19 55 10 45 10 29 V13 Z"/>
+          <path d="M23 31 L29 37 L41 24" />
+        </svg>
+        <span>Shield</span>
+      </div>
+
+      <div class="icon-card">
+        <svg class="ic-fill-gold" viewBox="0 0 64 64">
+          <polygon points="36,2 14,36 28,36 22,62 50,26 34,26" />
+        </svg>
+        <span>Power</span>
+      </div>
+
+      <div class="icon-card">
+        <svg class="ic-blue" viewBox="0 0 64 64" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 28 A24 22 0 0 1 56 28"/>
+          <line x1="10" y1="28" x2="27" y2="52"/>
+          <line x1="22" y1="26" x2="29" y2="52"/>
+          <line x1="42" y1="26" x2="35" y2="52"/>
+          <line x1="54" y1="28" x2="37" y2="52"/>
+          <rect x="27" y="52" width="10" height="8" rx="1.5"/>
+        </svg>
+        <span>Drop In</span>
+      </div>
+
+      <div class="icon-card">
+        <svg class="ic-blue" viewBox="0 0 64 64" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 26 C14 12 22 4 32 4 C42 4 50 12 50 26 C50 34 46 38 45 43 L44 50 H20 L19 43 C18 38 14 34 14 26 Z"/>
+          <circle cx="24" cy="26" r="4.5" fill="currentColor" stroke="none"/>
+          <circle cx="40" cy="26" r="4.5" fill="currentColor" stroke="none"/>
+          <polygon points="32,30 29,37 35,37" fill="currentColor" stroke="none"/>
+          <line x1="23" y1="50" x2="23" y2="56"/>
+          <line x1="32" y1="50" x2="32" y2="58"/>
+          <line x1="41" y1="50" x2="41" y2="56"/>
+        </svg>
+        <span>Eliminated</span>
+      </div>
+
+      <div class="icon-card">
+        <svg class="ic-gold" viewBox="0 0 64 64" fill="none" stroke-width="2" stroke-linecap="round">
+          <circle cx="32" cy="32" r="8"/>
+          <circle cx="32" cy="32" r="16" stroke-dasharray="4 5"/>
+          <circle cx="32" cy="32" r="26" stroke-dasharray="2 6" opacity="0.6"/>
+        </svg>
+        <span>Storm Circle</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TEXTURE & EFFECTS ================= -->
+<section class="section bg-charcoal" id="fx">
+  <div class="bg bg-charcoal"></div>
+  <div class="content wrap">
+    <span class="eyebrow">05 — Texture &amp; Effects</span>
+    <h2 class="section-title">Surface &amp; Motion</h2>
+    <p class="section-sub">Grit and pulse give the flat color system weight and make live state changes impossible to miss on a shared screen. Glow is reserved for interactive elements like buttons — never applied to stat numbers, which stay flat and legible.</p>
+
+    <div class="fx-grid">
+      <div class="fx-card fx-grunge">
+        <span class="fx-label">Grunge Panel</span>
+        <div class="fx-title">SCARRED &amp; SCUFFED</div>
+      </div>
+
+      <div class="fx-card fx-button">
+        <span class="fx-label">Neon Glow Button</span>
+        <div>
+          <button class="btn-glow">Join Match</button><br/>
+          <button class="btn-glow blue">Watch Live</button>
+        </div>
+      </div>
+
+      <div class="fx-card fx-storm">
+        <span class="fx-label">Storm Circle</span>
+        <div class="storm-wrap">
+          <div class="storm-ring r1"></div>
+          <div class="storm-ring r2"></div>
+          <div class="storm-ring r3"></div>
+          <div class="storm-core"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= VOICE & TONE ================= -->
+<section class="section bg-navy" id="voice">
+  <div class="bg bg-navy"></div>
+  <div class="content wrap">
+    <span class="eyebrow">06 — Voice &amp; Tone</span>
+    <h2 class="section-title">How We Talk</h2>
+    <p class="section-sub">Short. Punchy. Competitive. Every line reads like a command, not a description. No emoji — the type and color system carry the energy instead.</p>
+
+    <div class="voice-grid">
+      <div class="voice-card">
+        <div class="voice-line">LAST ONE STANDING.</div>
+        <div class="voice-desc">Win-state copy. Used on match end, leaderboard headers, hero taglines.</div>
+      </div>
+      <div class="voice-card">
+        <div class="voice-line">DROP IN. GEAR UP. WIN.</div>
+        <div class="voice-desc">Onboarding copy. Three beats, imperative verbs, zero explanation needed.</div>
+      </div>
+      <div class="voice-card">
+        <div class="voice-line">EVERY MOVE IS A TRANSACTION.</div>
+        <div class="voice-desc">Core product line. Pairs the game fantasy directly with the onchain mechanic.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Battle Royale Brand Kit — <b>Style Guide v2.0</b>
+</footer>
+
+</body>
+</html>

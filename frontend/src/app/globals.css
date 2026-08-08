@@ -1,0 +1,141 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-black: #0d0d0d;
+  --color-brand-charcoal: #1a1a1a;
+  --color-brand-navy: #16213e;
+  --color-brand-blue: #1ebddb;
+  --color-brand-gold: #f1d32b;
+  --color-brand-white: #f5f6f8;
+  --color-brand-gray: #9aa0ac;
+
+  /* Burbank Big Condensed Black and Heading Now are commercial fonts not
+     available on Google Fonts — Anton and Space Grotesk stand in until
+     licensed font files are available (see frontend/README.md). */
+  --font-logo: var(--font-anton), sans-serif;
+  --font-heading: var(--font-space-grotesk), sans-serif;
+  --font-body: var(--font-noto-sans), sans-serif;
+
+  --animate-pulse-glow: pulseGlow 5s ease-in-out infinite;
+  --animate-storm-pulse: stormPulse 3s ease-out infinite;
+  --animate-shake: shake 0.4s ease-in-out;
+  --animate-flash-damage: flashDamage 0.5s ease-out;
+  --animate-flash-heal: flashHeal 0.6s ease-out;
+  --animate-flash-shield: flashShield 0.6s ease-out;
+  --animate-eliminate: eliminateCard 0.6s ease-out forwards;
+  --animate-pop: pop 0.35s ease-out;
+}
+
+@keyframes pulseGlow {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.12);
+  }
+}
+
+@keyframes stormPulse {
+  0% {
+    transform: scale(0.25);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-6px);
+  }
+  40%,
+  80% {
+    transform: translateX(6px);
+  }
+}
+
+@keyframes flashDamage {
+  0% {
+    background-color: rgba(255, 60, 60, 0.35);
+    box-shadow: 0 0 0 2px rgba(255, 60, 60, 0.6);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: 0 0 0 2px transparent;
+  }
+}
+
+@keyframes flashHeal {
+  0% {
+    background-color: rgba(52, 211, 153, 0.3);
+    box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.6);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: 0 0 0 2px transparent;
+  }
+}
+
+@keyframes flashShield {
+  0% {
+    background-color: rgba(30, 189, 219, 0.3);
+    box-shadow: 0 0 0 2px rgba(30, 189, 219, 0.6);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: 0 0 0 2px transparent;
+  }
+}
+
+@keyframes eliminateCard {
+  0% {
+    transform: scale(1) rotate(0deg);
+    filter: grayscale(0);
+  }
+  40% {
+    transform: scale(1.05) rotate(-2deg);
+  }
+  100% {
+    transform: scale(0.97) rotate(0deg);
+    filter: grayscale(1);
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.18);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+html,
+body {
+  background: var(--color-brand-black);
+}
+
+::selection {
+  background: var(--color-brand-gold);
+  color: var(--color-brand-black);
+}
+
+.text-glow-blue {
+  filter: drop-shadow(0 0 8px rgba(30, 189, 219, 0.65));
+}
+.text-glow-gold {
+  filter: drop-shadow(0 0 8px rgba(241, 211, 43, 0.65));
+}
