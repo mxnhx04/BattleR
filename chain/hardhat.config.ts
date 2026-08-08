@@ -14,14 +14,10 @@ const config: HardhatUserConfig = {
     },
   },
   networks: {
-    // Placeholder only — do NOT trust these values for a real deploy.
-    // Monad Testnet's actual chainId/RPC/explorer must be confirmed against
-    // the official Monad docs before Phase 3 (deployment). Filled in then.
+    // Confirmed by the user against the official Monad docs (2026-08-08).
     monadTestnet: {
-      url: process.env.MONAD_TESTNET_RPC_URL || "",
-      chainId: process.env.MONAD_TESTNET_CHAIN_ID
-        ? Number(process.env.MONAD_TESTNET_CHAIN_ID)
-        : undefined,
+      url: process.env.MONAD_TESTNET_RPC_URL || "https://testnet-rpc.monad.xyz",
+      chainId: 10143,
       accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
     },
   },
