@@ -27,6 +27,29 @@ cp .env.example .env.local   # already filled in with the current deployment's v
 npm run dev
 ```
 
+## Running a demo without real players
+
+`chain/scripts/simulate.ts` plays a full match against the real deployed
+contract using throwaway bot wallets — real join/attack/shield/heal/claim
+transactions, no humans clicking. Useful for a quick live demo: point
+`/arena` at the contract, then run the bots and watch it play out.
+
+```bash
+cd chain
+cp .env.example .env   # DEPLOYER_PRIVATE_KEY must be the contract owner
+npm install
+npm run simulate
+```
+
+Tunable via env vars: `SIM_BOT_COUNT` (default 4), `SIM_TICK_MS` (default
+900), `SIM_BOT_FUND_MON` (default 0.05 — MON sent to each bot wallet to
+cover its entry fee, action fees, and gas). The owner wallet funds the
+bots, so it needs roughly `SIM_BOT_COUNT × SIM_BOT_FUND_MON` MON available.
+
+The match must be in `Waiting` status before running this — reset it from
+`/admin` first if a previous match is still `Active` or has an unclaimed
+prize sitting in it.
+
 ## Deploying to Vercel
 
 This is a monorepo — the Next.js app lives in `frontend/`, not the repo

@@ -6,7 +6,8 @@
   "scripts": {
     "compile": "hardhat compile",
     "test": "hardhat test",
-    "deploy:monad-testnet": "hardhat run scripts/deploy.ts --network monadTestnet"
+    "deploy:monad-testnet": "hardhat run scripts/deploy.ts --network monadTestnet",
+    "simulate": "hardhat run scripts/simulate.ts --network monadTestnet"
   },
   "keywords": [],
   "author": "",
