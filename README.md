@@ -13,8 +13,10 @@ shield, heal, power attack, claim — is a real transaction on Monad Testnet.
   currently deployed contract address.
 - **`index.html`** — a standalone brand style guide (fonts, colors, icons,
   voice/tone). Not part of the app; open it directly in a browser or publish
-  it separately. `vercel.json` at the repo root is what keeps Vercel from
-  deploying this file instead of the actual app — see below.
+  it separately. This is a plain static file sitting at the repo root next
+  to the real app, which is exactly why the Vercel **Root Directory**
+  project setting below is required — without it, Vercel finds this file
+  first and deploys it instead of the Next.js app.
 
 ## Running locally
 
@@ -28,8 +30,19 @@ npm run dev
 ## Deploying to Vercel
 
 This is a monorepo — the Next.js app lives in `frontend/`, not the repo
-root. The root-level `vercel.json` handles that automatically (points
-Vercel's install/build/dev commands and output directory into `frontend/`),
-so importing this repo into Vercel as-is should build the correct app
-without any manual "Root Directory" project setting. See `frontend/README.md`
-for the environment variables Vercel needs.
+root. Vercel detects the Next.js version by reading `package.json` at
+whatever it considers the project root, so **this one setting is
+required**:
+
+1. In the Vercel project → **Settings → General → Root Directory** → set
+   it to `frontend`, then save.
+2. Redeploy (Settings changes don't retrigger a build on their own —
+   go to **Deployments** → **⋯** on the latest one → **Redeploy**).
+
+A `vercel.json`/`buildCommand` override at the repo root does *not* fix
+this on its own — Vercel still reads `package.json` from the Root
+Directory to detect the Next.js version before any custom build command
+runs, and there's no `package.json` at the repo root. Root Directory is
+the only setting that actually changes where that detection happens.
+
+See `frontend/README.md` for the environment variables Vercel needs.
