@@ -1,7 +1,9 @@
+import { IconHeart } from "./icons";
+
 const SIZES = {
-  sm: "text-base",
-  md: "text-2xl",
-  lg: "text-4xl",
+  sm: "w-4 h-4",
+  md: "w-6 h-6",
+  lg: "w-9 h-9",
 } as const;
 
 export function HpHearts({
@@ -14,16 +16,16 @@ export function HpHearts({
   size?: keyof typeof SIZES;
 }) {
   return (
-    <span className={`${SIZES[size]} leading-none tracking-tight`}>
+    <span className="inline-flex items-center gap-0.5">
       {Array.from({ length: maxHp }, (_, i) =>
         i < hp ? (
-          <span key={i} className="text-glow-orange">
-            ❤️
-          </span>
+          <IconHeart key={i} filled className={`${SIZES[size]} text-brand-gold`} />
         ) : (
-          <span key={i} className="opacity-25 grayscale">
-            🖤
-          </span>
+          <IconHeart
+            key={i}
+            filled={false}
+            className={`${SIZES[size]} text-brand-gray opacity-40`}
+          />
         ),
       )}
     </span>

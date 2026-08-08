@@ -31,7 +31,7 @@ export function QrJoinCode({ size = 200 }: { size?: number }) {
 
   return (
     <div className="flex flex-col items-center gap-3">
-      <div className="rounded-xl overflow-hidden border-4 border-brand-orange shadow-[0_0_20px_rgba(255,107,0,0.4)] bg-brand-white">
+      <div className="rounded-xl overflow-hidden border-4 border-brand-gold shadow-[0_0_20px_rgba(241,211,43,0.4)] bg-brand-white">
         {/* Data URI from client-generated QR — next/image optimization doesn't apply here. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={state.dataUrl} alt="Scan to join the battle" width={size} height={size} />

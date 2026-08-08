@@ -47,7 +47,7 @@ export default function AdminPage() {
   return (
     <main className="flex-1 px-6 py-10 max-w-2xl mx-auto w-full">
       <div className="flex items-center justify-between mb-8">
-        <h1 className="font-display text-3xl tracking-wide">Host Controls</h1>
+        <h1 className="font-heading font-bold text-3xl tracking-wide">Host Controls</h1>
         <div className="flex items-center gap-4">
           <WalletBadge />
           <Link
@@ -67,14 +67,14 @@ export default function AdminPage() {
 
       <div className="flex flex-wrap items-center gap-4 mb-2">
         <GlowButton
-          color="orange"
+          color="gold"
           disabled={!isOwner || match.status !== "waiting" || match.players.length < 2 || pending === "start"}
           onClick={handleStart}
         >
           {pending === "start" ? "Starting…" : "Start Match"}
         </GlowButton>
         <GlowButton
-          color="purple"
+          color="blue"
           disabled={!isOwner || match.status === "active" || pending === "reset"}
           onClick={handleReset}
         >
@@ -104,7 +104,7 @@ export default function AdminPage() {
         href={explorerAddressUrl(CONTRACT_ADDRESS)}
         target="_blank"
         rel="noreferrer"
-        className="text-xs text-brand-cyan underline break-all"
+        className="text-xs text-brand-blue underline break-all"
       >
         View contract on explorer: {CONTRACT_ADDRESS}
       </a>
@@ -122,7 +122,7 @@ export default function AdminPage() {
 function Stat({ label, value }: { label: string; value: string | number }) {
   return (
     <div className="rounded-lg border border-white/10 bg-white/[0.03] py-3 text-center">
-      <div className="font-display text-xl capitalize">{value}</div>
+      <div className="font-body font-bold text-xl capitalize">{value}</div>
       <div className="text-brand-gray uppercase tracking-wide text-[0.65rem]">
         {label}
       </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { IconBolt, IconCrosshair, IconHeart, IconPlus, IconShield } from "./icons";
 import type { TxCounts } from "@/lib/types";
 
 export function TxCounter({ counts }: { counts: TxCounts }) {
@@ -22,7 +23,7 @@ export function TxCounter({ counts }: { counts: TxCounts }) {
   return (
     <div className="text-center">
       <div
-        className={`font-display text-6xl md:text-8xl text-brand-cyan text-glow-cyan tabular-nums ${snapshot.pop ? "animate-pop" : ""}`}
+        className={`font-heading font-bold text-6xl md:text-8xl text-brand-blue tabular-nums ${snapshot.pop ? "animate-pop" : ""}`}
       >
         {total}
       </div>
@@ -30,11 +31,21 @@ export function TxCounter({ counts }: { counts: TxCounts }) {
         Onchain Actions This Match
       </div>
       <div className="flex flex-wrap justify-center gap-x-5 gap-y-1 mt-3 text-xs text-brand-gray font-mono">
-        <span>⚔️ Attacks {counts.attack}</span>
-        <span>🛡️ Shields {counts.shield}</span>
-        <span>❤️ Heals {counts.heal}</span>
-        <span>💥 Power {counts.power}</span>
-        <span>🎮 Joins {counts.join}</span>
+        <span className="inline-flex items-center gap-1">
+          <IconCrosshair className="w-3.5 h-3.5" /> Attacks {counts.attack}
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <IconShield className="w-3.5 h-3.5" /> Shields {counts.shield}
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <IconHeart filled className="w-3.5 h-3.5" /> Heals {counts.heal}
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <IconBolt className="w-3.5 h-3.5" /> Power {counts.power}
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <IconPlus className="w-3.5 h-3.5" /> Joins {counts.join}
+        </span>
       </div>
     </div>
   );

@@ -4,14 +4,17 @@
   --color-brand-black: #0d0d0d;
   --color-brand-charcoal: #1a1a1a;
   --color-brand-navy: #16213e;
-  --color-brand-orange: #ff6b00;
-  --color-brand-cyan: #00e5ff;
-  --color-brand-purple: #b026ff;
+  --color-brand-blue: #1ebddb;
+  --color-brand-gold: #f1d32b;
   --color-brand-white: #f5f6f8;
   --color-brand-gray: #9aa0ac;
 
-  --font-display: var(--font-bebas), sans-serif;
-  --font-body: var(--font-inter), sans-serif;
+  /* Burbank Big Condensed Black and Heading Now are commercial fonts not
+     available on Google Fonts — Anton and Space Grotesk stand in until
+     licensed font files are available (see frontend/README.md). */
+  --font-logo: var(--font-anton), sans-serif;
+  --font-heading: var(--font-space-grotesk), sans-serif;
+  --font-body: var(--font-noto-sans), sans-serif;
 
   --animate-pulse-glow: pulseGlow 5s ease-in-out infinite;
   --animate-storm-pulse: stormPulse 3s ease-out infinite;
@@ -85,8 +88,8 @@
 
 @keyframes flashShield {
   0% {
-    background-color: rgba(0, 229, 255, 0.3);
-    box-shadow: 0 0 0 2px rgba(0, 229, 255, 0.6);
+    background-color: rgba(30, 189, 219, 0.3);
+    box-shadow: 0 0 0 2px rgba(30, 189, 219, 0.6);
   }
   100% {
     background-color: transparent;
@@ -126,16 +129,13 @@ body {
 }
 
 ::selection {
-  background: var(--color-brand-orange);
+  background: var(--color-brand-gold);
   color: var(--color-brand-black);
 }
 
-.text-glow-orange {
-  filter: drop-shadow(0 0 8px rgba(255, 107, 0, 0.65));
+.text-glow-blue {
+  filter: drop-shadow(0 0 8px rgba(30, 189, 219, 0.65));
 }
-.text-glow-cyan {
-  filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.65));
-}
-.text-glow-purple {
-  filter: drop-shadow(0 0 8px rgba(176, 38, 255, 0.65));
+.text-glow-gold {
+  filter: drop-shadow(0 0 8px rgba(241, 211, 43, 0.65));
 }

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { HpHearts } from "./HpHearts";
+import { IconShield, IconSkull } from "./icons";
 import type { Player } from "@/lib/types";
 
 type Flash = "damage" | "heal" | "shield" | null;
@@ -60,7 +61,7 @@ export function PlayerCard({ player }: { player: Player }) {
         player.alive
           ? "border-white/10 bg-white/[0.03]"
           : "border-white/5 bg-white/[0.01] grayscale opacity-50"
-      } ${player.isYou ? "ring-2 ring-brand-cyan" : ""} ${
+      } ${player.isYou ? "ring-2 ring-brand-blue" : ""} ${
         snapshot.flash === "damage" ? "animate-shake" : ""
       } ${snapshot.justEliminated ? "animate-eliminate" : ""}`}
     >
@@ -76,19 +77,17 @@ export function PlayerCard({ player }: { player: Player }) {
         />
       )}
       {!player.alive && (
-        <span className="absolute top-2 right-2 text-xl">💀</span>
+        <IconSkull className="absolute top-2 right-2 w-5 h-5 text-brand-gray" />
       )}
       {player.shielded && player.alive && (
-        <span
-          className={`absolute top-2 right-2 text-xl text-glow-cyan ${snapshot.flash === "shield" ? "animate-pop" : ""}`}
-        >
-          🛡️
-        </span>
+        <IconShield
+          className={`absolute top-2 right-2 w-5 h-5 text-brand-blue ${snapshot.flash === "shield" ? "animate-pop" : ""}`}
+        />
       )}
-      <div className="font-display text-lg tracking-wide truncate">
+      <div className="font-body font-semibold text-lg tracking-wide truncate">
         {player.name}
         {player.isYou && (
-          <span className="ml-1 text-brand-cyan text-xs align-middle">
+          <span className="ml-1 text-brand-blue text-xs align-middle">
             (you)
           </span>
         )}

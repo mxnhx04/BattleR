@@ -16,7 +16,7 @@ export function WalletBadge() {
 
   if (!authenticated) {
     return (
-      <GlowButton color="cyan" onClick={login} className="!text-sm !px-4 !py-2">
+      <GlowButton color="blue" onClick={login} className="!text-sm !px-4 !py-2">
         Connect Wallet
       </GlowButton>
     );
@@ -25,7 +25,7 @@ export function WalletBadge() {
   return (
     <div className="flex items-center gap-3 text-xs">
       <div className="text-right">
-        <div className="font-mono text-brand-cyan">
+        <div className="font-mono text-brand-blue">
           {address ? truncateAddress(address) : "…"}
         </div>
         <div className="text-brand-gray">

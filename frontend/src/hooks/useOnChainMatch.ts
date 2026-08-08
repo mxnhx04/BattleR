@@ -31,37 +31,36 @@ function describeEvent(eventName: string, args: Record<string, unknown>): {
     case "PlayerJoined":
       return {
         kind: "join",
-        message: `🎮 ${truncateAddress(args.player as string)} joined the battle`,
+        message: `${truncateAddress(args.player as string)} joined the battle`,
       };
     case "GameStarted":
-      return { kind: "system", message: "⚔️ The match has started!" };
+      return { kind: "system", message: "The match has started" };
     case "PlayerAttacked": {
       const isPower = args.isPowerAttack as boolean;
       const attacker = truncateAddress(args.attacker as string);
       const target = truncateAddress(args.target as string);
-      const emoji = isPower ? "💥" : "⚔️";
       const verb = isPower ? "power-attacked" : "attacked";
       if (args.blockedByShield) {
         return {
           kind: isPower ? "power" : "attack",
-          message: `${emoji} ${attacker} ${verb} ${target} — shield absorbed the hit`,
+          message: `${attacker} ${verb} ${target} — shield absorbed the hit`,
         };
       }
       return {
         kind: isPower ? "power" : "attack",
-        message: `${emoji} ${attacker} ${verb} ${target} — lost ${args.damage} HP`,
+        message: `${attacker} ${verb} ${target} — lost ${args.damage} HP`,
       };
     }
     case "PlayerShielded":
-      return { kind: "shield", message: `🛡️ ${truncateAddress(args.player as string)} activated shield` };
+      return { kind: "shield", message: `${truncateAddress(args.player as string)} activated shield` };
     case "PlayerHealed":
-      return { kind: "heal", message: `❤️ ${truncateAddress(args.player as string)} healed +1 HP` };
+      return { kind: "heal", message: `${truncateAddress(args.player as string)} healed +1 HP` };
     case "PlayerEliminated":
-      return { kind: "eliminate", message: `💀 ${truncateAddress(args.player as string)} has been eliminated!` };
+      return { kind: "eliminate", message: `${truncateAddress(args.player as string)} has been eliminated` };
     case "GameFinished":
       return {
         kind: "win",
-        message: `🏆 ${truncateAddress(args.winner as string)} is the last wallet standing!`,
+        message: `${truncateAddress(args.winner as string)} is the last wallet standing`,
       };
     default:
       return { kind: "system", message: eventName };

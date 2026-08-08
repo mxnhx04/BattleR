@@ -15,6 +15,7 @@ import { TxCounter } from "@/components/TxCounter";
 import { GlowButton } from "@/components/GlowButton";
 import { WalletBadge } from "@/components/WalletBadge";
 import { QrJoinCode } from "@/components/QrJoinCode";
+import { IconPhone, IconSpeaker, IconTrophy } from "@/components/icons";
 
 const ACTIVITY_SFX: Partial<Record<string, SfxKind>> = {
   join: "join",
@@ -93,13 +94,14 @@ export default function ArenaPage() {
 
     return (
       <main className="flex-1 flex flex-col items-center justify-center text-center px-6 py-16 gap-6">
-        <div className="text-sm tracking-[0.3em] text-brand-cyan uppercase">
-          🏆 Last Wallet Standing
+        <div className="flex items-center gap-2 text-sm tracking-[0.3em] text-brand-blue uppercase">
+          <IconTrophy className="w-5 h-5" />
+          Last Wallet Standing
         </div>
-        <h1 className="font-display text-6xl sm:text-8xl text-brand-orange text-glow-orange -skew-x-6">
+        <h1 className="font-heading font-bold text-6xl sm:text-8xl text-brand-gold">
           {winner.name}
         </h1>
-        <div className="font-display text-3xl text-white">
+        <div className="font-heading font-bold text-3xl text-white">
           Prize: {formatMon(match.prizePoolMon)}
         </div>
         <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 mt-4 text-sm text-brand-gray font-mono">
@@ -113,7 +115,7 @@ export default function ArenaPage() {
         </div>
         {isOwner && (
           <GlowButton
-            color="cyan"
+            color="blue"
             disabled={pending === "reset"}
             onClick={handleReset}
           >
@@ -128,15 +130,17 @@ export default function ArenaPage() {
   return (
     <main className="flex-1 px-4 sm:px-8 py-8 max-w-[1400px] mx-auto w-full">
       <div className="flex flex-wrap items-center justify-between gap-y-3 mb-8">
-        <h1 className="font-display text-3xl sm:text-4xl tracking-wide">
-          🔥 <span className="text-brand-orange">MONAD</span> BATTLE ROYALE
+        <h1 className="font-logo text-3xl sm:text-4xl tracking-wide">
+          <span className="text-brand-gold">MONAD</span>{" "}
+          <span className="text-white">BATTLE ROYALE</span>
         </h1>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           <button
             onClick={() => setSoundEnabled((v) => !v)}
-            className="text-xs tracking-[0.2em] uppercase text-brand-gray hover:text-white flex items-center gap-1"
+            className="text-xs tracking-[0.2em] uppercase text-brand-gray hover:text-white flex items-center gap-1.5"
           >
-            {soundEnabled ? "🔊 Sound On" : "🔇 Enable Sound"}
+            <IconSpeaker muted={!soundEnabled} className="w-4 h-4" />
+            {soundEnabled ? "Sound On" : "Enable Sound"}
           </button>
           <WalletBadge />
           <Link
@@ -150,8 +154,9 @@ export default function ArenaPage() {
 
       {match.status === "waiting" && (
         <div className="flex flex-col items-center gap-4 mb-10 bg-white/[0.03] border border-white/10 rounded-xl p-8">
-          <div className="font-display text-2xl tracking-wide text-center">
-            📱 Scan the code below to join on your phone
+          <div className="flex items-center gap-2 font-heading font-bold text-2xl tracking-wide text-center">
+            <IconPhone className="w-5 h-5" />
+            Scan the code below to join on your phone
           </div>
           <QrJoinCode size={220} />
         </div>
@@ -159,13 +164,13 @@ export default function ArenaPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] items-center gap-6 mb-10 bg-white/[0.03] border border-white/10 rounded-xl p-6">
         <div className="text-center lg:text-left">
-          <div className="font-display text-4xl">
+          <div className="font-heading font-bold text-4xl">
             {alive} / {total}
           </div>
           <div className="text-xs tracking-[0.2em] text-brand-gray uppercase">
             Players Alive
           </div>
-          <div className="font-display text-2xl mt-4 text-brand-cyan">
+          <div className="font-heading font-bold text-2xl mt-4 text-brand-gold">
             {formatMon(match.prizePoolMon)}
           </div>
           <div className="text-xs tracking-[0.2em] text-brand-gray uppercase">
@@ -183,7 +188,7 @@ export default function ArenaPage() {
               </div>
               {isOwner ? (
                 <GlowButton
-                  color="orange"
+                  color="gold"
                   disabled={total < 2 || pending === "start"}
                   onClick={handleStart}
                 >
@@ -196,7 +201,7 @@ export default function ArenaPage() {
               )}
             </>
           ) : (
-            <div className="text-sm tracking-[0.2em] text-brand-orange uppercase font-display text-xl">
+            <div className="text-sm tracking-[0.2em] text-brand-gold uppercase font-heading font-bold text-xl">
               Match Active
             </div>
           )}

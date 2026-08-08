@@ -6,20 +6,23 @@
 <title>BATTLE ROYALE — Brand Style Guide</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@500;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
   :root{
     --black:#0D0D0D;
     --charcoal:#1A1A1A;
     --navy:#16213E;
-    --orange:#FF6B00;
-    --cyan:#00E5FF;
-    --purple:#B026FF;
+    --gold:#F1D32B;
+    --blue:#1EBDDB;
     --white:#F5F6F8;
     --gray:#9AA0AC;
     --line:rgba(245,246,248,0.08);
-    --font-display:'Bebas Neue', sans-serif;
-    --font-body:'Inter', sans-serif;
+    /* Burbank Big Condensed Black and Heading Now are commercial fonts
+       (not on Google Fonts) — Anton and Space Grotesk stand in until
+       licensed font files are available. */
+    --font-logo:'Anton', sans-serif;
+    --font-heading:'Space Grotesk', sans-serif;
+    --font-body:'Noto Sans', sans-serif;
   }
 
   *{ margin:0; padding:0; box-sizing:border-box; }
@@ -34,12 +37,13 @@
     overflow-x:hidden;
   }
 
-  ::selection{ background:var(--orange); color:var(--black); }
+  ::selection{ background:var(--gold); color:var(--black); }
 
   h1,h2,h3,h4{
-    font-family:var(--font-display);
+    font-family:var(--font-heading);
+    font-weight:700;
     text-transform:uppercase;
-    letter-spacing:0.04em;
+    letter-spacing:0.02em;
     line-height:1;
   }
 
@@ -70,14 +74,13 @@
     display:flex;
     align-items:center;
     gap:0.6rem;
-    font-family:var(--font-display);
-    letter-spacing:0.08em;
+    font-family:var(--font-logo);
+    letter-spacing:0.04em;
     font-size:1.1rem;
   }
   .nav-brand .dot{
     width:10px;height:10px;border-radius:50%;
-    background:var(--orange);
-    box-shadow:0 0 8px var(--orange), 0 0 16px var(--orange);
+    background:var(--gold);
   }
   .nav-links{
     display:flex;
@@ -90,7 +93,7 @@
     color:var(--gray);
   }
   .nav-links a{ text-decoration:none; transition:color .2s; }
-  .nav-links a:hover{ color:var(--cyan); }
+  .nav-links a:hover{ color:var(--blue); }
   @media (max-width:700px){ .nav-links{ display:none; } }
 
   /* ---------- SECTION SCAFFOLD (diagonal dividers) ---------- */
@@ -115,17 +118,16 @@
     align-items:center;
     gap:0.5rem;
     font-size:0.72rem;
-    font-weight:800;
+    font-weight:700;
     letter-spacing:0.28em;
     text-transform:uppercase;
-    color:var(--cyan);
+    color:var(--blue);
     margin-bottom:1rem;
   }
   .eyebrow::before{
     content:'';
     width:22px;height:2px;
-    background:var(--cyan);
-    box-shadow:0 0 6px var(--cyan);
+    background:var(--blue);
   }
 
   .section-title{
@@ -148,9 +150,8 @@
     justify-content:center;
     text-align:center;
     background:
-      radial-gradient(circle at 50% 30%, rgba(255,107,0,0.14), transparent 55%),
-      radial-gradient(circle at 20% 80%, rgba(0,229,255,0.10), transparent 50%),
-      radial-gradient(circle at 80% 85%, rgba(176,38,255,0.10), transparent 50%),
+      radial-gradient(circle at 50% 30%, rgba(241,211,43,0.12), transparent 55%),
+      radial-gradient(circle at 20% 80%, rgba(30,189,219,0.10), transparent 50%),
       var(--black);
     padding:6rem 2rem 4rem;
     overflow:hidden;
@@ -160,7 +161,7 @@
     top:50%; left:50%;
     width:640px; height:640px;
     transform:translate(-50%,-50%);
-    background:radial-gradient(circle, rgba(255,107,0,0.35), rgba(0,229,255,0.08) 45%, transparent 70%);
+    background:radial-gradient(circle, rgba(241,211,43,0.30), rgba(30,189,219,0.08) 45%, transparent 70%);
     filter:blur(40px);
     animation:pulseGlow 5s ease-in-out infinite;
     z-index:0;
@@ -178,14 +179,13 @@
   }
   .badge svg{ width:100%; height:100%; overflow:visible; }
   .badge .hex-outer{
-    fill:rgba(255,107,0,0.06);
-    stroke:var(--orange);
+    fill:rgba(241,211,43,0.06);
+    stroke:var(--gold);
     stroke-width:2;
-    filter:drop-shadow(0 0 10px rgba(255,107,0,0.65));
   }
   .badge .hex-inner{
     fill:none;
-    stroke:var(--cyan);
+    stroke:var(--blue);
     stroke-width:1;
     opacity:0.6;
   }
@@ -194,22 +194,17 @@
     stroke-width:1.6;
     fill:none;
   }
-  .badge .crosshair-dot{ fill:var(--orange); }
+  .badge .crosshair-dot{ fill:var(--gold); }
 
   .hero-word{
     position:relative;
     z-index:1;
-    font-family:var(--font-display);
+    font-family:var(--font-logo);
     font-size:clamp(3rem, 11vw, 7.2rem);
-    letter-spacing:0.03em;
-    transform:skewX(-6deg);
-    background:linear-gradient(180deg, #ffffff 0%, #ffffff 55%, var(--orange) 150%);
-    -webkit-background-clip:text;
-    background-clip:text;
-    color:transparent;
-    filter:drop-shadow(0 6px 24px rgba(255,107,0,0.25));
+    letter-spacing:0.02em;
+    color:var(--white);
   }
-  .hero-word span{ color:var(--orange); -webkit-text-fill-color:var(--orange); }
+  .hero-word span{ color:var(--gold); }
 
   .hero-tag{
     position:relative;
@@ -241,7 +236,7 @@
     color:var(--gray);
     background:rgba(255,255,255,0.02);
   }
-  .pill b{ color:var(--cyan); font-weight:800; }
+  .pill b{ color:var(--blue); font-weight:800; }
 
   /* ---------- COLOR PALETTE ---------- */
   .swatch-grid{
@@ -260,9 +255,10 @@
   .swatch-color{ height:110px; position:relative; }
   .swatch-body{ padding:1rem 1.1rem 1.2rem; }
   .swatch-hex{
-    font-family:var(--font-display);
-    font-size:1.25rem;
-    letter-spacing:0.05em;
+    font-family:var(--font-heading);
+    font-weight:700;
+    font-size:1.15rem;
+    letter-spacing:0.03em;
   }
   .swatch-name{
     font-size:0.72rem;
@@ -289,17 +285,17 @@
     font-size:0.68rem;
     font-weight:800;
     letter-spacing:0.14em;
-    color:var(--orange);
+    color:var(--gold);
     width:64px;
     flex-shrink:0;
   }
   .type-sample h1,.type-sample h2,.type-sample h3,.type-sample h4{
-    letter-spacing:0.02em;
+    letter-spacing:0.01em;
   }
   .h1-sample{ font-size:clamp(2.4rem,6vw,4rem); }
-  .h2-sample{ font-size:clamp(2rem,5vw,3rem); color:var(--cyan); }
+  .h2-sample{ font-size:clamp(2rem,5vw,3rem); color:var(--blue); }
   .h3-sample{ font-size:clamp(1.5rem,4vw,2.1rem); }
-  .h4-sample{ font-size:1.3rem; color:var(--gray); letter-spacing:0.16em; }
+  .h4-sample{ font-size:1.3rem; color:var(--gray); letter-spacing:0.14em; }
 
   .body-sample{
     margin-top:2.4rem;
@@ -327,8 +323,9 @@
     background:linear-gradient(160deg, rgba(255,255,255,0.03), transparent);
   }
   .font-card .fname{ font-size:0.7rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gray); margin-bottom:0.6rem; }
-  .font-card .fdemo{ font-family:var(--font-display); font-size:2.6rem; letter-spacing:0.03em; }
-  .font-card .fdemo.body{ font-family:var(--font-body); font-size:1.4rem; font-weight:700; letter-spacing:0; }
+  .font-card .fdemo{ font-family:var(--font-logo); font-size:2.6rem; letter-spacing:0.02em; }
+  .font-card .fdemo.heading{ font-family:var(--font-heading); font-weight:700; font-size:2rem; letter-spacing:0.01em; text-transform:uppercase; }
+  .font-card .fdemo.body{ font-family:var(--font-body); font-size:1.4rem; font-weight:600; letter-spacing:0; }
   .font-card .fuse{ margin-top:0.6rem; font-size:0.8rem; color:#c3c7ce; }
 
   /* ---------- ICONOGRAPHY ---------- */
@@ -357,10 +354,9 @@
     text-transform:uppercase;
     color:var(--gray);
   }
-  .ic-orange{ stroke:var(--orange); filter:drop-shadow(0 0 6px rgba(255,107,0,0.65)); }
-  .ic-cyan{ stroke:var(--cyan); filter:drop-shadow(0 0 6px rgba(0,229,255,0.65)); }
-  .ic-purple{ stroke:var(--purple); filter:drop-shadow(0 0 6px rgba(176,38,255,0.65)); }
-  .ic-fill-orange{ fill:var(--orange); filter:drop-shadow(0 0 6px rgba(255,107,0,0.65)); }
+  .ic-gold{ stroke:var(--gold); }
+  .ic-blue{ stroke:var(--blue); }
+  .ic-fill-gold{ fill:var(--gold); }
 
   /* ---------- TEXTURE & EFFECTS ---------- */
   .fx-grid{
@@ -400,9 +396,10 @@
   }
   .fx-grunge .fx-title{
     position:relative; z-index:2;
-    font-family:var(--font-display);
+    font-family:var(--font-heading);
+    font-weight:700;
     font-size:2.2rem;
-    letter-spacing:0.04em;
+    letter-spacing:0.02em;
     color:var(--white);
   }
 
@@ -413,12 +410,13 @@
   }
   .btn-glow{
     align-self:flex-start;
-    font-family:var(--font-display);
-    font-size:1.1rem;
-    letter-spacing:0.08em;
+    font-family:var(--font-heading);
+    font-weight:700;
+    font-size:1.05rem;
+    letter-spacing:0.05em;
     background:transparent;
-    color:var(--orange);
-    border:2px solid var(--orange);
+    color:var(--gold);
+    border:2px solid var(--gold);
     padding:0.85rem 1.8rem;
     border-radius:6px;
     cursor:pointer;
@@ -426,17 +424,17 @@
     text-transform:uppercase;
   }
   .btn-glow:hover{
-    background:var(--orange);
+    background:var(--gold);
     color:var(--black);
-    box-shadow:0 0 12px var(--orange), 0 0 36px rgba(255,107,0,0.6), 0 0 60px rgba(255,107,0,0.35);
+    box-shadow:0 0 12px var(--gold), 0 0 36px rgba(241,211,43,0.6), 0 0 60px rgba(241,211,43,0.35);
     transform:translateY(-2px);
   }
-  .btn-glow.cyan{ border-color:var(--cyan); color:var(--cyan); margin-top:1rem;}
-  .btn-glow.cyan:hover{ background:var(--cyan); color:var(--black); box-shadow:0 0 12px var(--cyan), 0 0 36px rgba(0,229,255,0.6), 0 0 60px rgba(0,229,255,0.35); }
+  .btn-glow.blue{ border-color:var(--blue); color:var(--blue); margin-top:1rem;}
+  .btn-glow.blue:hover{ background:var(--blue); color:var(--black); box-shadow:0 0 12px var(--blue), 0 0 36px rgba(30,189,219,0.6), 0 0 60px rgba(30,189,219,0.35); }
 
   /* storm circle */
   .fx-storm{
-    background:radial-gradient(circle at 50% 50%, rgba(176,38,255,0.08), var(--black) 70%);
+    background:radial-gradient(circle at 50% 50%, rgba(241,211,43,0.08), var(--black) 70%);
     align-items:center;
     justify-content:center;
   }
@@ -450,8 +448,8 @@
   .storm-ring{
     position:absolute;
     border-radius:50%;
-    border:2px solid var(--purple);
-    box-shadow:0 0 14px rgba(176,38,255,0.6);
+    border:2px solid var(--gold);
+    box-shadow:0 0 14px rgba(241,211,43,0.6);
   }
   .storm-ring.r1{ width:150px; height:150px; animation:stormPulse 3s ease-out infinite; }
   .storm-ring.r2{ width:150px; height:150px; animation:stormPulse 3s ease-out infinite 1s; }
@@ -459,8 +457,8 @@
   .storm-core{
     width:44px; height:44px;
     border-radius:50%;
-    background:radial-gradient(circle, var(--purple), transparent 70%);
-    box-shadow:0 0 20px var(--purple);
+    background:radial-gradient(circle, var(--gold), transparent 70%);
+    box-shadow:0 0 20px var(--gold);
   }
   @keyframes stormPulse{
     0%{ transform:scale(0.25); opacity:1; }
@@ -475,18 +473,20 @@
   }
   .voice-card{
     border:1px solid var(--line);
-    border-left:3px solid var(--orange);
+    border-left:3px solid var(--gold);
     padding:2rem;
     background:rgba(255,255,255,0.02);
     border-radius:0 10px 10px 0;
   }
-  .voice-card:nth-child(2){ border-left-color:var(--cyan); }
-  .voice-card:nth-child(3){ border-left-color:var(--purple); }
+  .voice-card:nth-child(2){ border-left-color:var(--blue); }
+  .voice-card:nth-child(3){ border-left-color:var(--gold); }
   .voice-line{
-    font-family:var(--font-display);
+    font-family:var(--font-heading);
+    font-weight:700;
     font-size:clamp(1.6rem,4vw,2.2rem);
-    letter-spacing:0.03em;
+    letter-spacing:0.01em;
     margin-bottom:0.8rem;
+    text-transform:uppercase;
   }
   .voice-desc{ font-size:0.85rem; color:var(--gray); }
 
@@ -500,7 +500,7 @@
     border-top:1px solid var(--line);
     background:var(--black);
   }
-  footer b{ color:var(--orange); }
+  footer b{ color:var(--gold); }
 </style>
 </head>
 <body>
@@ -538,9 +538,8 @@
     <p class="hero-tag">Every move is a transaction. Attack. Defend. Survive. Last wallet standing wins.</p>
     <div class="hero-meta">
       <span class="pill">Base <b>#0D0D0D</b></span>
-      <span class="pill">Accent <b>#FF6B00</b></span>
-      <span class="pill">Accent <b>#00E5FF</b></span>
-      <span class="pill">Glow <b>#B026FF</b></span>
+      <span class="pill">Gold <b>#F1D32B</b></span>
+      <span class="pill">Blue <b>#1EBDDB</b></span>
     </div>
   </div>
 </header>
@@ -551,7 +550,7 @@
   <div class="content wrap">
     <span class="eyebrow">02 — Foundation</span>
     <h2 class="section-title">Color Palette</h2>
-    <p class="section-sub">A dark, high-contrast base built for a projector and a phone screen at the same time. Neon accents mark action, energy and danger — never decoration for its own sake.</p>
+    <p class="section-sub">A dark, high-contrast base built for a projector and a phone screen at the same time. Gold and blue mark action and state — never decoration for its own sake, and never used as a glow behind numbers.</p>
 
     <div class="swatch-grid">
       <div class="swatch">
@@ -579,27 +578,19 @@
         </div>
       </div>
       <div class="swatch">
-        <div class="swatch-color" style="background:#FF6B00;"></div>
+        <div class="swatch-color" style="background:#F1D32B;"></div>
         <div class="swatch-body">
-          <div class="swatch-hex">#FF6B00</div>
-          <div class="swatch-name">Electric Orange — Primary</div>
-          <div class="swatch-note">Attack, damage, CTAs. The color of aggression.</div>
+          <div class="swatch-hex">#F1D32B</div>
+          <div class="swatch-name">Gold — Primary</div>
+          <div class="swatch-note">Attack, prizes, wins, primary CTAs.</div>
         </div>
       </div>
       <div class="swatch">
-        <div class="swatch-color" style="background:#00E5FF;"></div>
+        <div class="swatch-color" style="background:#1EBDDB;"></div>
         <div class="swatch-body">
-          <div class="swatch-hex">#00E5FF</div>
-          <div class="swatch-name">Cyan — Secondary</div>
+          <div class="swatch-hex">#1EBDDB</div>
+          <div class="swatch-name">Light Blue — Secondary</div>
           <div class="swatch-note">Shields, live state, onchain confirmations, links.</div>
-        </div>
-      </div>
-      <div class="swatch">
-        <div class="swatch-color" style="background:#B026FF;"></div>
-        <div class="swatch-body">
-          <div class="swatch-hex">#B026FF</div>
-          <div class="swatch-name">Magenta Glow — Highlight</div>
-          <div class="swatch-note">Storm circle, rare events, special attacks, win states.</div>
         </div>
       </div>
     </div>
@@ -612,18 +603,23 @@
   <div class="content wrap">
     <span class="eyebrow">03 — Voice on the page</span>
     <h2 class="section-title">Typography</h2>
-    <p class="section-sub">Condensed, all-caps, italicized headings shout across a projector screen. A clean grotesk keeps body copy legible on a five-inch phone during a match.</p>
+    <p class="section-sub">A heavy condensed logo mark, a bold grotesk for headings, and a clean humanist sans for in-game and body text keep the hierarchy readable across a projector and a five-inch phone.</p>
 
     <div class="font-specimen">
       <div class="font-card">
-        <div class="fname">Display — Bebas Neue</div>
+        <div class="fname">Logo — Anton</div>
         <div class="fdemo">DROP IN</div>
-        <div class="fuse">Headlines, stat numbers, button labels, HUD callouts.</div>
+        <div class="fuse">Wordmark only. Stands in for Burbank Big Condensed Black (commercial, not on Google Fonts).</div>
       </div>
       <div class="font-card">
-        <div class="fname">Body — Inter</div>
-        <div class="fdemo body">Match briefing text</div>
-        <div class="fuse">Descriptions, rules, timestamps, transaction details.</div>
+        <div class="fname">Heading — Space Grotesk</div>
+        <div class="fdemo heading">Match Briefing</div>
+        <div class="fuse">Section headings, buttons, sheet titles. Stands in for Heading Now (commercial).</div>
+      </div>
+      <div class="font-card">
+        <div class="fname">Body / In-game — Noto Sans</div>
+        <div class="fdemo body">Player names, stats, HUD text</div>
+        <div class="fuse">Descriptions, rules, timestamps, transaction details, in-game feature copy.</div>
       </div>
     </div>
 
@@ -647,7 +643,7 @@
     </div>
 
     <div class="body-sample">
-      Every attack, shield and heal is a real transaction settled on Monad. <strong>Body copy stays quiet and functional</strong> so the display type can do the shouting — use it for rules, confirmations and anything a player needs to actually read under pressure.
+      Every attack, shield and heal is a real transaction settled on Monad. <strong>Body copy stays quiet and functional</strong> so headings can do the shouting — use it for rules, confirmations and anything a player needs to actually read under pressure.
     </div>
   </div>
 </section>
@@ -658,11 +654,11 @@
   <div class="content wrap">
     <span class="eyebrow">04 — Iconography</span>
     <h2 class="section-title">Icon Set</h2>
-    <p class="section-sub">Thin-stroke, glowing icons that read instantly at arena scale. Color signals meaning: orange for offense, cyan for defense/state, purple for rare or fatal events.</p>
+    <p class="section-sub">Thin-stroke line icons — no emoji anywhere in the product. Color signals meaning: gold for offense and prizes, blue for defense and state.</p>
 
     <div class="icon-grid">
       <div class="icon-card">
-        <svg class="ic-orange" viewBox="0 0 64 64" fill="none" stroke-width="2.4" stroke-linecap="round">
+        <svg class="ic-gold" viewBox="0 0 64 64" fill="none" stroke-width="2.4" stroke-linecap="round">
           <circle cx="32" cy="32" r="20"/>
           <line x1="32" y1="2" x2="32" y2="14"/>
           <line x1="32" y1="50" x2="32" y2="62"/>
@@ -674,7 +670,7 @@
       </div>
 
       <div class="icon-card">
-        <svg class="ic-cyan" viewBox="0 0 64 64" fill="none" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">
+        <svg class="ic-blue" viewBox="0 0 64 64" fill="none" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">
           <path d="M32 4 L54 13 V29 C54 45 45 55 32 60 C19 55 10 45 10 29 V13 Z"/>
           <path d="M23 31 L29 37 L41 24" />
         </svg>
@@ -682,14 +678,14 @@
       </div>
 
       <div class="icon-card">
-        <svg class="ic-fill-orange" viewBox="0 0 64 64">
+        <svg class="ic-fill-gold" viewBox="0 0 64 64">
           <polygon points="36,2 14,36 28,36 22,62 50,26 34,26" />
         </svg>
         <span>Power</span>
       </div>
 
       <div class="icon-card">
-        <svg class="ic-purple" viewBox="0 0 64 64" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <svg class="ic-blue" viewBox="0 0 64 64" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
           <path d="M8 28 A24 22 0 0 1 56 28"/>
           <line x1="10" y1="28" x2="27" y2="52"/>
           <line x1="22" y1="26" x2="29" y2="52"/>
@@ -701,7 +697,7 @@
       </div>
 
       <div class="icon-card">
-        <svg class="ic-cyan" viewBox="0 0 64 64" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <svg class="ic-blue" viewBox="0 0 64 64" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M14 26 C14 12 22 4 32 4 C42 4 50 12 50 26 C50 34 46 38 45 43 L44 50 H20 L19 43 C18 38 14 34 14 26 Z"/>
           <circle cx="24" cy="26" r="4.5" fill="currentColor" stroke="none"/>
           <circle cx="40" cy="26" r="4.5" fill="currentColor" stroke="none"/>
@@ -714,7 +710,7 @@
       </div>
 
       <div class="icon-card">
-        <svg class="ic-purple" viewBox="0 0 64 64" fill="none" stroke-width="2" stroke-linecap="round">
+        <svg class="ic-gold" viewBox="0 0 64 64" fill="none" stroke-width="2" stroke-linecap="round">
           <circle cx="32" cy="32" r="8"/>
           <circle cx="32" cy="32" r="16" stroke-dasharray="4 5"/>
           <circle cx="32" cy="32" r="26" stroke-dasharray="2 6" opacity="0.6"/>
@@ -731,7 +727,7 @@
   <div class="content wrap">
     <span class="eyebrow">05 — Texture &amp; Effects</span>
     <h2 class="section-title">Surface &amp; Motion</h2>
-    <p class="section-sub">Grit, glow and pulse. These effects give the flat color system weight and make live state changes impossible to miss on a shared screen.</p>
+    <p class="section-sub">Grit and pulse give the flat color system weight and make live state changes impossible to miss on a shared screen. Glow is reserved for interactive elements like buttons — never applied to stat numbers, which stay flat and legible.</p>
 
     <div class="fx-grid">
       <div class="fx-card fx-grunge">
@@ -743,7 +739,7 @@
         <span class="fx-label">Neon Glow Button</span>
         <div>
           <button class="btn-glow">Join Match</button><br/>
-          <button class="btn-glow cyan">Watch Live</button>
+          <button class="btn-glow blue">Watch Live</button>
         </div>
       </div>
 
@@ -766,7 +762,7 @@
   <div class="content wrap">
     <span class="eyebrow">06 — Voice &amp; Tone</span>
     <h2 class="section-title">How We Talk</h2>
-    <p class="section-sub">Short. Punchy. Competitive. Every line reads like a command, not a description.</p>
+    <p class="section-sub">Short. Punchy. Competitive. Every line reads like a command, not a description. No emoji — the type and color system carry the energy instead.</p>
 
     <div class="voice-grid">
       <div class="voice-card">
@@ -786,7 +782,7 @@
 </section>
 
 <footer>
-  Battle Royale Brand Kit — <b>Style Guide v1.0</b>
+  Battle Royale Brand Kit — <b>Style Guide v2.0</b>
 </footer>
 
 </body>

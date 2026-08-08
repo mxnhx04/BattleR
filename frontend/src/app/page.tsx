@@ -9,14 +9,14 @@ export default function LandingPage() {
         className="absolute top-1/2 left-1/2 w-[640px] h-[640px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl animate-pulse-glow"
         style={{
           background:
-            "radial-gradient(circle, rgba(255,107,0,0.35), rgba(0,229,255,0.08) 45%, transparent 70%)",
+            "radial-gradient(circle, rgba(241,211,43,0.30), rgba(30,189,219,0.10) 45%, transparent 70%)",
         }}
       />
       <div
         className="absolute inset-0 -z-10"
         style={{
           background:
-            "radial-gradient(circle at 50% 30%, rgba(255,107,0,0.14), transparent 55%), radial-gradient(circle at 20% 80%, rgba(0,229,255,0.10), transparent 50%), radial-gradient(circle at 80% 85%, rgba(176,38,255,0.10), transparent 50%)",
+            "radial-gradient(circle at 50% 30%, rgba(241,211,43,0.12), transparent 55%), radial-gradient(circle at 20% 80%, rgba(30,189,219,0.10), transparent 50%)",
         }}
       />
 
@@ -24,9 +24,9 @@ export default function LandingPage() {
         <Logo size={160} />
       </div>
 
-      <h1 className="relative z-10 font-display text-6xl sm:text-8xl tracking-wide -skew-x-6">
+      <h1 className="relative z-10 font-logo text-6xl sm:text-8xl tracking-wide">
         <span className="text-white">MONAD</span>{" "}
-        <span className="text-brand-orange text-glow-orange">BATTLE ROYALE</span>
+        <span className="text-brand-gold">BATTLE ROYALE</span>
       </h1>
 
       <p className="relative z-10 mt-6 max-w-xl text-brand-gray text-base sm:text-lg">
@@ -37,10 +37,10 @@ export default function LandingPage() {
       </p>
 
       <div className="relative z-10 mt-10 flex flex-wrap items-center justify-center gap-4">
-        <GlowButton color="orange" href="/game">
+        <GlowButton color="gold" href="/game">
           Join Match
         </GlowButton>
-        <GlowButton color="cyan" href="/arena">
+        <GlowButton color="blue" href="/arena">
           Watch Live
         </GlowButton>
       </div>
