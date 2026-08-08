@@ -19,34 +19,37 @@ export function useGameWallet(): GameWallet {
   const { wallets } = useWallets();
   const [walletClient, setWalletClient] = useState<WalletClient>();
 
-  const embeddedWallet = useMemo(
-    () => wallets.find((w) => w.walletClientType === "privy"),
-    [wallets],
-  );
+  // Any connected wallet works here — Privy's embedded wallet
+  // (walletClientType "privy") for attendees who log in with email, or an
+  // external wallet (MetaMask, etc., walletClientType e.g. "metamask")
+  // for anyone bringing their own, like the contract owner connecting the
+  // deployer wallet to reach host controls. Both implement the same
+  // ConnectedWallet interface, so nothing else here needs to change.
+  const activeWallet = useMemo(() => wallets[0], [wallets]);
 
   useEffect(() => {
     let cancelled = false;
 
     async function connect() {
-      if (!embeddedWallet) {
+      if (!activeWallet) {
         setWalletClient(undefined);
         return;
       }
       try {
-        if (embeddedWallet.chainId !== `eip155:${monadTestnet.id}`) {
-          await embeddedWallet.switchChain(monadTestnet.id);
+        if (activeWallet.chainId !== `eip155:${monadTestnet.id}`) {
+          await activeWallet.switchChain(monadTestnet.id);
         }
-        const provider = await embeddedWallet.getEthereumProvider();
+        const provider = await activeWallet.getEthereumProvider();
         if (cancelled) return;
         setWalletClient(
           createWalletClient({
-            account: embeddedWallet.address as Address,
+            account: activeWallet.address as Address,
             chain: monadTestnet,
             transport: custom(provider),
           }),
         );
       } catch (error) {
-        console.warn("Failed to connect embedded wallet:", error);
+        console.warn("Failed to connect wallet:", error);
       }
     }
 
@@ -54,7 +57,7 @@ export function useGameWallet(): GameWallet {
     return () => {
       cancelled = true;
     };
-  }, [embeddedWallet]);
+  }, [activeWallet]);
 
   const wrappedLogin = useCallback(() => login(), [login]);
   const wrappedLogout = useCallback(() => logout(), [logout]);
@@ -62,7 +65,7 @@ export function useGameWallet(): GameWallet {
   return {
     ready,
     authenticated,
-    address: embeddedWallet?.address as Address | undefined,
+    address: activeWallet?.address as Address | undefined,
     walletClient,
     login: wrappedLogin,
     logout: wrappedLogout,
