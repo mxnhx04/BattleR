@@ -2,20 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useMatch } from "@/hooks/useMatch";
+import { useOnChainMatch } from "@/hooks/useOnChainMatch";
+import { useGameWallet } from "@/hooks/useGameWallet";
+import { useMonBalance } from "@/hooks/useMonBalance";
 import { useNow } from "@/hooks/useNow";
-import {
-  attack,
-  ensureAutoplay,
-  FEES,
-  getState,
-  heal,
-  joinMatch,
-  powerAttack,
-  shield,
-} from "@/lib/matchStore";
-import { formatMon, shortTxHash } from "@/lib/format";
-import { MAX_HEALS_PER_MATCH } from "@/lib/economy";
+import { attack, heal, joinGame, powerAttack, shield } from "@/lib/contract/actions";
+import { ATTACK_FEE_MON, ENTRY_FEE_MON, HEAL_FEE_MON, MAX_HEALS_PER_MATCH, POWER_ATTACK_FEE_MON, SHIELD_FEE_MON } from "@/lib/economy";
+import { formatMon, shortTxHash, truncateAddress } from "@/lib/format";
 import { HpHearts } from "@/components/HpHearts";
 import { GlowButton } from "@/components/GlowButton";
 import { TargetSheet } from "@/components/TargetSheet";
@@ -23,43 +16,84 @@ import { ActivityFeed } from "@/components/ActivityFeed";
 
 type PendingAction = "attack" | "shield" | "heal" | "power" | "join" | null;
 
+const FEES = {
+  join: ENTRY_FEE_MON,
+  attack: ATTACK_FEE_MON,
+  shield: SHIELD_FEE_MON,
+  heal: HEAL_FEE_MON,
+  power: POWER_ATTACK_FEE_MON,
+};
+
+const ACTION_LABEL: Record<Exclude<PendingAction, null>, string> = {
+  join: "🎮 Joined the battle",
+  attack: "⚔️ Attack confirmed",
+  shield: "🛡️ Shield confirmed",
+  heal: "❤️ Heal confirmed",
+  power: "💥 Power attack confirmed",
+};
+
 export default function GamePage() {
-  const match = useMatch();
+  const { ready, authenticated, address, walletClient, login } = useGameWallet();
+  const balance = useMonBalance(address);
+  const match = useOnChainMatch(address);
   const now = useNow();
   const [pending, setPending] = useState<PendingAction>(null);
-  const [pickingTarget, setPickingTarget] = useState<"attack" | "power" | null>(
-    null,
-  );
-  const [confirmToast, setConfirmToast] = useState<{
-    message: string;
-    tx: string;
-  } | null>(null);
+  const [pickingTarget, setPickingTarget] = useState<"attack" | "power" | null>(null);
+  const [confirmToast, setConfirmToast] = useState<{ message: string; tx: string } | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  async function runAction(label: Exclude<PendingAction, null>, fn: () => Promise<string>) {
+    if (!walletClient) return;
+    setError(null);
+    setPending(label);
+    try {
+      const hash = await fn();
+      setConfirmToast({ message: ACTION_LABEL[label], tx: hash });
+      setTimeout(() => setConfirmToast(null), 3200);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Transaction failed");
+    } finally {
+      setPending(null);
+    }
+  }
+
+  // ---------- Not logged in yet ----------
+  if (!ready) {
+    return (
+      <main className="flex-1 flex items-center justify-center text-brand-gray text-sm">
+        Loading…
+      </main>
+    );
+  }
+
+  if (!authenticated || !address) {
+    return (
+      <main className="flex-1 flex flex-col items-center justify-center px-6 py-16 text-center gap-6">
+        <h1 className="font-display text-4xl tracking-wide">
+          JOIN THE <span className="text-brand-orange text-glow-orange">BATTLE</span>
+        </h1>
+        <p className="text-brand-gray text-sm max-w-xs">
+          Log in to get a wallet — no extension or seed phrase needed. Every
+          move after this is a real Monad transaction.
+        </p>
+        <GlowButton color="orange" onClick={login}>
+          Log In
+        </GlowButton>
+        <Link
+          href="/arena"
+          className="text-xs tracking-[0.2em] uppercase text-brand-gray/70 hover:text-brand-gray"
+        >
+          Watch live instead
+        </Link>
+      </main>
+    );
+  }
 
   const you = match.players.find((p) => p.isYou);
 
-  function runAction(label: Exclude<PendingAction, null>, fn: () => void) {
-    setPending(label);
-    setTimeout(() => {
-      fn();
-      const fresh = getState();
-      const latest = fresh.activity[0];
-      if (latest) {
-        setConfirmToast({ message: latest.message, tx: latest.txHash });
-        setTimeout(() => setConfirmToast(null), 2600);
-      }
-      setPending(null);
-    }, 700);
-  }
-
-  function handleJoin() {
-    runAction("join", () => {
-      joinMatch("You", true);
-      ensureAutoplay();
-    });
-  }
-
-  // ---------- Not joined yet ----------
+  // ---------- Logged in, not joined on-chain yet ----------
   if (!you) {
+    const insufficientFunds = balance !== undefined && balance < FEES.join;
     return (
       <main className="flex-1 flex flex-col items-center justify-center px-6 py-16 text-center gap-6">
         <h1 className="font-display text-4xl tracking-wide">
@@ -74,13 +108,34 @@ export default function GamePage() {
           <span>Players {match.players.length}</span>
           <span>Pool {formatMon(match.prizePoolMon)}</span>
         </div>
+
+        {insufficientFunds && (
+          <div className="max-w-xs text-sm border border-brand-orange/40 rounded-lg py-4 px-4 bg-brand-orange/10">
+            Your wallet needs {formatMon(FEES.join)} to join. Send testnet MON to:
+            <div className="font-mono text-xs text-brand-cyan mt-2 break-all">
+              {address}
+            </div>
+            <a
+              href="https://faucet.monad.xyz"
+              target="_blank"
+              rel="noreferrer"
+              className="block mt-2 text-brand-cyan underline"
+            >
+              Open the Monad faucet
+            </a>
+          </div>
+        )}
+
         <GlowButton
           color="orange"
-          disabled={pending === "join"}
-          onClick={handleJoin}
+          disabled={pending === "join" || !walletClient || insufficientFunds}
+          onClick={() =>
+            runAction("join", () => joinGame(walletClient!, address))
+          }
         >
           {pending === "join" ? "Submitting transaction…" : "Join Battle"}
         </GlowButton>
+        {error && <div className="text-sm text-red-400 max-w-xs">{error}</div>}
         <Link
           href="/arena"
           className="text-xs tracking-[0.2em] uppercase text-brand-gray/70 hover:text-brand-gray"
@@ -95,7 +150,7 @@ export default function GamePage() {
   const attackCooldown = Math.max(0, you.attackReadyAt - now) / 1000;
   const powerCooldown = Math.max(0, you.powerReadyAt - now) / 1000;
   const healsLeft = MAX_HEALS_PER_MATCH - you.healsUsed;
-  const canAct = match.status === "active" && you.alive;
+  const canAct = match.status === "active" && you.alive && !!walletClient && pending === null;
 
   return (
     <main className="flex-1 flex flex-col px-4 py-6 max-w-md mx-auto w-full">
@@ -103,11 +158,11 @@ export default function GamePage() {
       <div className="flex items-center justify-between mb-4">
         <div>
           <div className="font-display text-2xl tracking-wide">
-            {you.name}{" "}
+            {truncateAddress(you.id)}{" "}
             {you.shielded && <span className="text-glow-cyan">🛡️</span>}
           </div>
           <div className="text-[0.65rem] text-brand-gray font-mono">
-            {you.address}
+            {balance !== undefined ? formatMon(balance) : "…"}
           </div>
         </div>
         <HpHearts hp={you.hp} maxHp={you.maxHp} size="lg" />
@@ -181,7 +236,7 @@ export default function GamePage() {
           color="cyan"
           disabled={!canAct || you.shielded}
           className="w-full !text-lg"
-          onClick={() => runAction("shield", () => shield(you.id))}
+          onClick={() => runAction("shield", () => shield(walletClient!, address))}
         >
           {pending === "shield" ? "Submitting…" : "Shield"}
         </GlowButton>
@@ -189,7 +244,7 @@ export default function GamePage() {
           color="orange"
           disabled={!canAct || you.hp >= you.maxHp || healsLeft <= 0}
           className="w-full !text-lg"
-          onClick={() => runAction("heal", () => heal(you.id))}
+          onClick={() => runAction("heal", () => heal(walletClient!, address))}
         >
           {pending === "heal"
             ? "Submitting…"
@@ -220,8 +275,8 @@ export default function GamePage() {
         <ActivityFeed events={match.activity} limit={6} />
       </div>
 
-      {/* Pending / confirmation overlays */}
-      {pending && pending !== "join" && (
+      {/* Pending / confirmation / error overlays */}
+      {pending && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-brand-charcoal border border-brand-orange/40 rounded-full px-5 py-2 text-sm flex items-center gap-2">
           <span className="h-2 w-2 rounded-full bg-brand-orange animate-pulse" />
           Submitting transaction…
@@ -236,6 +291,11 @@ export default function GamePage() {
           </span>
         </div>
       )}
+      {error && !pending && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-brand-charcoal border border-red-500/40 rounded-full px-5 py-2 text-sm max-w-[90vw] text-red-400 text-center">
+          {error}
+        </div>
+      )}
 
       {pickingTarget && (
         <TargetSheet
@@ -247,8 +307,8 @@ export default function GamePage() {
             setPickingTarget(null);
             runAction(kind, () =>
               kind === "attack"
-                ? attack(you.id, targetId)
-                : powerAttack(you.id, targetId),
+                ? attack(walletClient!, address, targetId as `0x${string}`)
+                : powerAttack(walletClient!, address, targetId as `0x${string}`),
             );
           }}
         />

@@ -1,25 +1,54 @@
 "use client";
 
-import { useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { useMatch } from "@/hooks/useMatch";
-import { ensureAutoplay, resetMatch, startMatch } from "@/lib/matchStore";
+import { useOnChainMatch } from "@/hooks/useOnChainMatch";
+import { useGameWallet } from "@/hooks/useGameWallet";
+import { useIsOwner } from "@/hooks/useIsOwner";
+import { resetMatch, startGame } from "@/lib/contract/actions";
 import { formatMon } from "@/lib/format";
 import { PlayerCard } from "@/components/PlayerCard";
 import { ActivityFeed } from "@/components/ActivityFeed";
 import { TxCounter } from "@/components/TxCounter";
 import { GlowButton } from "@/components/GlowButton";
+import { WalletBadge } from "@/components/WalletBadge";
 
 export default function ArenaPage() {
-  const match = useMatch();
-
-  useEffect(() => {
-    ensureAutoplay();
-  }, []);
+  const { address, walletClient } = useGameWallet();
+  const isOwner = useIsOwner(address);
+  const match = useOnChainMatch(address);
+  const [pending, setPending] = useState<"start" | "reset" | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const alive = match.players.filter((p) => p.alive).length;
   const total = match.players.length;
   const winner = match.players.find((p) => p.id === match.winnerId);
+
+  async function handleStart() {
+    if (!walletClient || !address) return;
+    setError(null);
+    setPending("start");
+    try {
+      await startGame(walletClient, address);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to start match");
+    } finally {
+      setPending(null);
+    }
+  }
+
+  async function handleReset() {
+    if (!walletClient || !address) return;
+    setError(null);
+    setPending("reset");
+    try {
+      await resetMatch(walletClient, address);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to reset match");
+    } finally {
+      setPending(null);
+    }
+  }
 
   if (match.status === "finished" && winner) {
     const durationSec =
@@ -38,7 +67,7 @@ export default function ArenaPage() {
         <div className="text-sm tracking-[0.3em] text-brand-cyan uppercase">
           🏆 Last Wallet Standing
         </div>
-        <h1 className="font-display text-7xl sm:text-9xl text-brand-orange text-glow-orange -skew-x-6">
+        <h1 className="font-display text-6xl sm:text-8xl text-brand-orange text-glow-orange -skew-x-6">
           {winner.name}
         </h1>
         <div className="font-display text-3xl text-white">
@@ -53,9 +82,16 @@ export default function ArenaPage() {
           <span>Total Tx {totalTx}</span>
           <span>Duration {durationSec}s</span>
         </div>
-        <GlowButton color="cyan" onClick={resetMatch}>
-          New Match
-        </GlowButton>
+        {isOwner && (
+          <GlowButton
+            color="cyan"
+            disabled={pending === "reset"}
+            onClick={handleReset}
+          >
+            {pending === "reset" ? "Resetting…" : "New Match"}
+          </GlowButton>
+        )}
+        {error && <div className="text-sm text-red-400 max-w-md">{error}</div>}
       </main>
     );
   }
@@ -66,12 +102,15 @@ export default function ArenaPage() {
         <h1 className="font-display text-3xl sm:text-4xl tracking-wide">
           🔥 <span className="text-brand-orange">MONAD</span> BATTLE ROYALE
         </h1>
-        <Link
-          href="/"
-          className="text-xs tracking-[0.2em] uppercase text-brand-gray hover:text-white"
-        >
-          Exit
-        </Link>
+        <div className="flex items-center gap-4">
+          <WalletBadge />
+          <Link
+            href="/"
+            className="text-xs tracking-[0.2em] uppercase text-brand-gray hover:text-white"
+          >
+            Exit
+          </Link>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] items-center gap-6 mb-10 bg-white/[0.03] border border-white/10 rounded-xl p-6">
@@ -98,15 +137,26 @@ export default function ArenaPage() {
               <div className="text-sm text-brand-gray mb-3">
                 Waiting for the host to start the match…
               </div>
-              <GlowButton color="orange" disabled={total < 2} onClick={startMatch}>
-                Start Match
-              </GlowButton>
+              {isOwner ? (
+                <GlowButton
+                  color="orange"
+                  disabled={total < 2 || pending === "start"}
+                  onClick={handleStart}
+                >
+                  {pending === "start" ? "Starting…" : "Start Match"}
+                </GlowButton>
+              ) : (
+                <div className="text-xs text-brand-gray">
+                  Connect the host wallet to start the match.
+                </div>
+              )}
             </>
           ) : (
             <div className="text-sm tracking-[0.2em] text-brand-orange uppercase font-display text-xl">
               Match Active
             </div>
           )}
+          {error && <div className="text-xs text-red-400 mt-2 max-w-xs ml-auto">{error}</div>}
         </div>
       </div>
 

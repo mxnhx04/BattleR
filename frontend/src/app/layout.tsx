@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Bebas_Neue, Inter } from "next/font/google";
+import { PrivyProviders } from "@/providers/PrivyProviders";
 import "./globals.css";
 
 const bebasNeue = Bebas_Neue({
@@ -25,7 +26,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${bebasNeue.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-brand-black text-brand-white font-body">
-        {children}
+        <PrivyProviders>{children}</PrivyProviders>
       </body>
     </html>
   );

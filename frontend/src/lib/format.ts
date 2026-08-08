@@ -1,6 +1,5 @@
-// Deterministic pseudo-address so the same player name always renders the
-// same "wallet". Replaced by a real connected address once wallet wiring
-// lands in Phase 4.
+// Deterministic pseudo-address so the same mock player name always renders
+// the same fake "wallet". Only used by the old mock match engine.
 export function shortAddress(seed: string): string {
   let hash = 0;
   for (let i = 0; i < seed.length; i++) {
@@ -20,6 +19,11 @@ export function fakeTxHash(): string {
 
 export function shortTxHash(hash: string): string {
   return `${hash.slice(0, 6)}…${hash.slice(-4)}`;
+}
+
+// Same truncation shape as shortTxHash, for real wallet addresses.
+export function truncateAddress(address: string): string {
+  return `${address.slice(0, 6)}…${address.slice(-4)}`;
 }
 
 export function formatMon(amount: number): string {
