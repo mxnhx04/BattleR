@@ -1,19 +1,22 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
-import { useSimulatedMatch } from "@/hooks/useSimulatedMatch";
+import { useLocalDuel } from "@/hooks/useLocalDuel";
+import { useNow } from "@/hooks/useNow";
 import { useSfx } from "@/hooks/useSfx";
 import type { SfxKind } from "@/lib/sfx";
+import { MAX_HEALS_PER_MATCH } from "@/lib/economy";
 import { formatMon } from "@/lib/format";
+import type { Player } from "@/lib/types";
+import { HpHearts } from "@/components/HpHearts";
 import { PlayerCard } from "@/components/PlayerCard";
 import { ActivityFeed } from "@/components/ActivityFeed";
 import { TxCounter } from "@/components/TxCounter";
 import { GlowButton } from "@/components/GlowButton";
-import { IconSpeaker, IconTrophy } from "@/components/icons";
+import { IconShield, IconSpeaker, IconTrophy } from "@/components/icons";
 
 const ACTIVITY_SFX: Partial<Record<string, SfxKind>> = {
-  join: "join",
   attack: "attack",
   power: "power",
   shield: "shield",
@@ -23,15 +26,9 @@ const ACTIVITY_SFX: Partial<Record<string, SfxKind>> = {
 };
 
 export default function SimulatePage() {
-  const [runId, setRunId] = useState(0);
-  // key={runId} forces a full remount, so useSimulatedMatch always plays a
-  // fresh match from its own mount instead of needing to reset mid-flight.
-  return <SimulateRun key={runId} onReplay={() => setRunId((n) => n + 1)} />;
-}
-
-function SimulateRun({ onReplay }: { onReplay: () => void }) {
-  const match = useSimulatedMatch();
+  const { match, attack, powerAttack, shield, heal, reset } = useLocalDuel();
   const { play, muted, toggleMuted } = useSfx();
+  const now = useNow();
   const lastSeenEventId = useRef<string | null>(null);
 
   useEffect(() => {
@@ -44,8 +41,6 @@ function SimulateRun({ onReplay }: { onReplay: () => void }) {
     if (sfx) play(sfx);
   }, [match.activity, play]);
 
-  const alive = match.players.filter((p) => p.alive).length;
-  const total = match.players.length;
   const winner = match.players.find((p) => p.id === match.winnerId);
 
   if (match.status === "finished" && winner) {
@@ -55,20 +50,16 @@ function SimulateRun({ onReplay }: { onReplay: () => void }) {
           <IconTrophy className="w-5 h-5" />
           Last Wallet Standing
         </div>
-        <h1 className="font-heading font-bold text-6xl sm:text-8xl text-brand-gold">
-          {winner.name}
-        </h1>
-        <div className="font-heading font-bold text-3xl text-white">
-          Prize: {formatMon(match.prizePoolMon)}
-        </div>
+        <h1 className="font-heading font-bold text-6xl sm:text-8xl text-brand-gold">{winner.name}</h1>
+        <div className="font-heading font-bold text-3xl text-white">Prize: {formatMon(match.prizePoolMon)}</div>
         <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 mt-4 text-sm text-brand-gray font-mono">
           <span>Attacks {match.txCounts.attack}</span>
           <span>Shields {match.txCounts.shield}</span>
           <span>Heals {match.txCounts.heal}</span>
           <span>Power {match.txCounts.power}</span>
         </div>
-        <GlowButton color="gold" onClick={onReplay}>
-          Run It Again
+        <GlowButton color="gold" onClick={reset}>
+          Play Again
         </GlowButton>
         <Link href="/" className="text-xs tracking-[0.2em] uppercase text-brand-gray/70 hover:text-brand-gray">
           Back to menu
@@ -77,12 +68,13 @@ function SimulateRun({ onReplay }: { onReplay: () => void }) {
     );
   }
 
+  const [p1, p2] = match.players;
+
   return (
     <main className="flex-1 px-4 sm:px-8 py-8 max-w-[1400px] mx-auto w-full">
       <div className="flex flex-wrap items-center justify-between gap-y-3 mb-4">
         <h1 className="font-logo text-3xl sm:text-4xl tracking-wide">
-          <span className="text-brand-gold">MONAD</span>{" "}
-          <span className="text-white">BATTLE ROYALE</span>
+          <span className="text-brand-gold">MONAD</span> <span className="text-white">BATTLE ROYALE</span>
         </h1>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           <button
@@ -98,48 +90,126 @@ function SimulateRun({ onReplay }: { onReplay: () => void }) {
         </div>
       </div>
 
-      <div className="mb-8 text-center text-xs tracking-[0.2em] text-brand-gray/70 uppercase border border-white/10 rounded-lg py-2 px-4 bg-white/[0.02] inline-block">
-        Demo mode — two bots playing locally, no wallet or blockchain involved
+      <div className="mb-6 text-center text-xs tracking-[0.2em] text-brand-gray/70 uppercase border border-white/10 rounded-lg py-2 px-4 bg-white/[0.02] inline-block">
+        Demo mode — take turns tapping buttons for each side, no wallet or blockchain involved
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] items-center gap-6 mb-10 bg-white/[0.03] border border-white/10 rounded-xl p-6">
-        <div className="text-center lg:text-left">
-          <div className="font-heading font-bold text-4xl">
-            {alive} / {total || 2}
-          </div>
-          <div className="text-xs tracking-[0.2em] text-brand-gray uppercase">Players Alive</div>
-          <div className="font-heading font-bold text-2xl mt-4 text-brand-gold">
-            {formatMon(match.prizePoolMon)}
-          </div>
-          <div className="text-xs tracking-[0.2em] text-brand-gray uppercase">Prize Pool</div>
-        </div>
-
+      <div className="text-center mb-8">
         <TxCounter counts={match.txCounts} label="Actions This Match" />
+        <div className="font-heading font-bold text-xl mt-2 text-brand-gold">{formatMon(match.prizePoolMon)}</div>
+        <div className="text-xs tracking-[0.2em] text-brand-gray uppercase">Prize Pool</div>
+      </div>
 
-        <div className="text-center lg:text-right">
-          <div className="text-sm tracking-[0.2em] text-brand-gold uppercase font-heading font-bold text-xl">
-            {match.status === "waiting" ? "Starting…" : "Match Active"}
-          </div>
-        </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        {p1 && (
+          <DuelPanel
+            player={p1}
+            opponentAlive={p2?.alive ?? false}
+            now={now}
+            active={match.status === "active"}
+            onAttack={() => attack(0)}
+            onPower={() => powerAttack(0)}
+            onShield={() => shield(0)}
+            onHeal={() => heal(0)}
+          />
+        )}
+        {p2 && (
+          <DuelPanel
+            player={p2}
+            opponentAlive={p1?.alive ?? false}
+            now={now}
+            active={match.status === "active"}
+            onAttack={() => attack(1)}
+            onPower={() => powerAttack(1)}
+            onShield={() => shield(1)}
+            onHeal={() => heal(1)}
+          />
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6">
         <div className="grid grid-cols-2 gap-4">
-          {match.players.map((p) => (
-            <PlayerCard key={p.id} player={p} />
-          ))}
-          {match.players.length === 0 && (
-            <div className="col-span-full text-brand-gray text-sm py-12 text-center">
-              Bots are joining…
-            </div>
-          )}
+          <PlayerCard player={p1 ?? match.players[0]} />
+          <PlayerCard player={p2 ?? match.players[1]} />
         </div>
-
         <div className="bg-white/[0.03] border border-white/10 rounded-xl p-4">
           <div className="text-xs tracking-[0.2em] text-brand-gray uppercase mb-3">Live Activity</div>
           <ActivityFeed events={match.activity} limit={20} />
         </div>
       </div>
     </main>
+  );
+}
+
+function DuelPanel({
+  player,
+  opponentAlive,
+  now,
+  active,
+  onAttack,
+  onPower,
+  onShield,
+  onHeal,
+}: {
+  player: Player;
+  opponentAlive: boolean;
+  now: number;
+  active: boolean;
+  onAttack: () => void;
+  onPower: () => void;
+  onShield: () => void;
+  onHeal: () => void;
+}) {
+  const canAct = active && player.alive && opponentAlive;
+  const attackCooldown = Math.max(0, player.attackReadyAt - now) / 1000;
+  const powerCooldown = Math.max(0, player.powerReadyAt - now) / 1000;
+  const healsLeft = MAX_HEALS_PER_MATCH - player.healsUsed;
+
+  return (
+    <div
+      className={`rounded-xl border p-5 ${player.alive ? "border-white/10 bg-white/[0.03]" : "border-white/5 bg-white/[0.01] opacity-60"}`}
+    >
+      <div className="flex items-center justify-between mb-4">
+        <div className="font-body font-semibold text-xl tracking-wide flex items-center gap-2">
+          {player.name}
+          {player.shielded && <IconShield className="w-5 h-5 text-brand-blue" />}
+        </div>
+        <HpHearts hp={player.hp} maxHp={player.maxHp} size="md" />
+      </div>
+
+      {!player.alive ? (
+        <div className="text-center text-sm text-brand-gray py-6">Eliminated</div>
+      ) : (
+        <div className="grid grid-cols-2 gap-3">
+          <GlowButton
+            color="gold"
+            disabled={!canAct || attackCooldown > 0}
+            className="w-full !text-base"
+            onClick={onAttack}
+          >
+            {attackCooldown > 0 ? `Attack (${attackCooldown.toFixed(0)}s)` : "Attack"}
+          </GlowButton>
+          <GlowButton color="blue" disabled={!canAct || player.shielded} className="w-full !text-base" onClick={onShield}>
+            Shield
+          </GlowButton>
+          <GlowButton
+            color="blue"
+            disabled={!canAct || player.hp >= player.maxHp || healsLeft <= 0}
+            className="w-full !text-base"
+            onClick={onHeal}
+          >
+            {`Heal (${Math.max(healsLeft, 0)} left)`}
+          </GlowButton>
+          <GlowButton
+            color="gold"
+            disabled={!canAct || powerCooldown > 0}
+            className="w-full !text-base"
+            onClick={onPower}
+          >
+            {powerCooldown > 0 ? `Power (${powerCooldown.toFixed(0)}s)` : "Power Attack"}
+          </GlowButton>
+        </div>
+      )}
+    </div>
   );
 }
